@@ -291,6 +291,68 @@ This allows Praxis to integrate seamlessly with existing workflows such as:
 
 ---
 
+## Installation
+
+Praxis is written in **TypeScript** and distributed as a **Node.js CLI**.
+
+### Prerequisites
+
+* Node.js **>= 18**
+* npm (or compatible package manager)
+
+You can verify your environment with:
+
+```
+node --version
+npm --version
+```
+
+---
+
+### Install (Global)
+
+To install Praxis globally and make the `praxis` command available system-wide:
+
+```
+npm install -g praxis
+```
+
+After installation, verify it works:
+
+```
+praxis --help
+```
+
+---
+
+### Install (Project-local)
+
+You can also install Praxis as a development dependency inside a project:
+
+```
+npm install --save-dev praxis
+```
+
+Then run it via:
+
+```
+npx praxis --help
+```
+
+---
+
+### Using with IDEs and AI Chats
+
+When installed locally or globally, Praxis commands can be mapped to:
+
+* IDE extensions (e.g. VS Code)
+* AI chat slash commands
+* local tool servers (e.g. via `praxis serve`)
+
+The installation method does not change Praxis behavior; it only affects how commands are invoked.
+
+---
+
 ## Status
 
 Praxis is under active development.
