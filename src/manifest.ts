@@ -13,6 +13,11 @@ export interface CommandDefinition {
     alias?: string;
     required?: boolean;
   }[];
+  arguments?: {
+    name: string;
+    description: string;
+    required?: boolean;
+  }[];
 }
 
 export const manifest: CommandDefinition[] = [
@@ -27,6 +32,13 @@ export const manifest: CommandDefinition[] = [
       {
         name: 'create',
         description: 'Create a new intent',
+        arguments: [
+          {
+            name: 'description',
+            description: 'The description of the intent to create',
+            required: true,
+          }
+        ]
       },
       {
         name: 'update',
@@ -50,11 +62,11 @@ export const manifest: CommandDefinition[] = [
     name: 'model',
     description: 'Generate or update the intent model',
     options: [
-        {
-            name: 'intent-id',
-            description: 'The ID of the intent to model',
-            required: true
-        }
+      {
+        name: 'intent-id',
+        description: 'The ID of the intent to model',
+        required: true
+      }
     ]
   },
   {
@@ -126,6 +138,17 @@ export const manifest: CommandDefinition[] = [
       {
         name: 'commands',
         description: 'List all available commands in machine-readable form',
+      },
+      {
+        name: 'generate-slash-commands',
+        description: 'Generate slash command definitions for IDE integration',
+        arguments: [
+          {
+            name: 'tool',
+            description: 'The tool ID (e.g., antigravity)',
+            required: true,
+          }
+        ]
       },
     ],
   },

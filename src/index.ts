@@ -2,6 +2,8 @@
 import { Command } from 'commander';
 import { manifest } from './manifest.js';
 import { initCommand } from './commands/init.js';
+import { intentCreateAction } from './commands/intent/create.js';
+import { generateSlashCommandsAction } from './commands/integration/generate.js';
 
 const program = new Command();
 
@@ -18,6 +20,13 @@ manifest.forEach((cmdDef) => {
         cmdDef.subcommands.forEach((subCmdDef) => {
             const subCmd = cmd.command(subCmdDef.name).description(subCmdDef.description);
 
+            if (subCmdDef.arguments) {
+                subCmdDef.arguments.forEach(arg => {
+                    const argStr = arg.required ? `<${arg.name}>` : `[${arg.name}]`;
+                    subCmd.argument(argStr, arg.description);
+                });
+            }
+
             if (subCmdDef.options) {
                 subCmdDef.options.forEach(opt => {
                     const flag = opt.required ? `<${opt.name}>` : `[${opt.name}]`;
@@ -25,13 +34,28 @@ manifest.forEach((cmdDef) => {
                 });
             }
 
-            subCmd.action(() => {
-                console.log(`Executing ${cmdDef.name} ${subCmdDef.name}...`);
-                // Implementation will go here
+            subCmd.action(async (...args: any[]) => {
+                if (cmdDef.name === 'intent' && subCmdDef.name === 'create') {
+                    const [description] = args;
+                    await intentCreateAction(description);
+                } else if (cmdDef.name === 'integration' && subCmdDef.name === 'generate-slash-commands') {
+                    const [tool] = args;
+                    await generateSlashCommandsAction(tool);
+                } else {
+                    console.log(`Executing ${cmdDef.name} ${subCmdDef.name}...`);
+                    // Implementation will go here
+                }
             });
         });
     } else {
-        // Top-level command with no subcommands (e.g., 'model' if it's not nested)
+        // Top-level command with no subcommands
+        if (cmdDef.arguments) {
+            cmdDef.arguments.forEach(arg => {
+                const argStr = arg.required ? `<${arg.name}>` : `[${arg.name}]`;
+                cmd.argument(argStr, arg.description);
+            });
+        }
+
         if (cmdDef.options) {
             cmdDef.options.forEach(opt => {
                 const flag = opt.required ? `<${opt.name}>` : `[${opt.name}]`;
