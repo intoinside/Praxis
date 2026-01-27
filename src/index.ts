@@ -1,6 +1,7 @@
 #!/usr/bin/env ts-node
 import { Command } from 'commander';
 import { manifest } from './manifest.js';
+import { initCommand } from './commands/init.js';
 
 const program = new Command();
 
@@ -38,9 +39,13 @@ manifest.forEach((cmdDef) => {
             });
         }
 
-        cmd.action(() => {
-            console.log(`Executing ${cmdDef.name}...`);
-            // Implementation will go here
+        cmd.action(async () => {
+            if (cmdDef.name === 'init') {
+                await initCommand();
+            } else {
+                console.log(`Executing ${cmdDef.name}...`);
+                // Implementation will go here
+            }
         });
     }
 });

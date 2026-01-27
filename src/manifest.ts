@@ -17,6 +17,10 @@ export interface CommandDefinition {
 
 export const manifest: CommandDefinition[] = [
   {
+    name: 'init',
+    description: 'Initialize a new project to be used with Praxis',
+  },
+  {
     name: 'intent',
     description: 'Manage intents (the WHY)',
     subcommands: [

@@ -95,7 +95,13 @@ All Praxis functionality is exposed through a unified command interface.
 ### Intent Commands
 
 ```bash
-praxis intent create
+praxis init
+```
+
+Initialize a new project to be used with Praxis
+
+```bash
+praxis intent create <intent-description>
 ```
 
 Create a new intent.
