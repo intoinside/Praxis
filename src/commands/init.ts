@@ -4,10 +4,11 @@ import path from 'path';
 export async function initCommand() {
     const rootDir = process.cwd();
     const praxisDir = path.join(rootDir, '.praxis');
+    const templatesDir = path.join(praxisDir, 'templates');
     const intentsDir = path.join(praxisDir, 'intents');
     const specsDir = path.join(praxisDir, 'specs');
 
-    const dirs = [praxisDir, intentsDir, specsDir];
+    const dirs = [praxisDir, templatesDir, intentsDir, specsDir];
 
     for (const dir of dirs) {
         if (!fs.existsSync(dir)) {
@@ -19,6 +20,24 @@ export async function initCommand() {
         } else {
             console.log(`Directory already exists: ${path.relative(rootDir, dir)}`);
         }
+    }
+
+    // Copy templates from root templates/ to .praxis/templates/
+    const sourceTemplatesDir = path.join(rootDir, 'templates');
+    if (fs.existsSync(sourceTemplatesDir)) {
+        console.log('\nCopying templates...');
+        const templateFiles = fs.readdirSync(sourceTemplatesDir);
+        for (const file of templateFiles) {
+            const sourcePath = path.join(sourceTemplatesDir, file);
+            const targetPath = path.join(templatesDir, file);
+
+            if (fs.statSync(sourcePath).isFile()) {
+                fs.copyFileSync(sourcePath, targetPath);
+                console.log(`- Copied: ${file}`);
+            }
+        }
+    } else {
+        console.log('\nNo source templates directory found at root. Skipping template copy.');
     }
 
     console.log('\nPraxis project structure initialized successfully!');

@@ -98,7 +98,7 @@ All Praxis functionality is exposed through a unified command interface.
 praxis init
 ```
 
-Initialize a new project to be used with Praxis
+Initialize a new project to be used with Praxis. Templates are provided in the `templates` directory.
 
 ```bash
 praxis intent create <intent-description>
