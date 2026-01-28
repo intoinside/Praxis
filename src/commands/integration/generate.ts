@@ -73,7 +73,7 @@ function flattenCommands(commands: CommandDefinition[], parentName?: string): Co
  */
 function generateBody(fullName: string, cmd: CommandDefinition): string {
     const args = cmd.arguments ? cmd.arguments.map(arg => `"$${arg.name}"`).join(' ') : '';
-    const cliCommand = `npx ts-node --loader ts-node/esm src/index.ts ${fullName} ${args}`.trim();
+    const cliCommand = `node --loader ts-node/esm src/index.ts ${fullName} ${args}`.trim();
 
     let body = `To execute this Praxis command, run:\n\n// turbo\n${cliCommand}\n`;
 

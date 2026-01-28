@@ -5,5 +5,5 @@ description: Manually refine a specification while preserving intent traceabilit
 To execute this Praxis command, run:
 
 // turbo
-npx ts-node --loader ts-node/esm src/index.ts spec refine
+node --loader ts-node/esm src/index.ts spec refine
 
