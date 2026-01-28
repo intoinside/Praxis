@@ -1,6 +1,17 @@
 # Praxis
 
-**Praxis** is an development framework that bridges **Intent‑Driven Development (IDD)** and **Spec‑Driven Development (SDD)** into a single, coherent workflow.
+```
+ ███████████                                   ███         
+░░███░░░░░███                                 ░░░          
+ ░███    ░███ ████████   ██████   █████ █████ ████   █████ 
+ ░██████████ ░░███░░███ ░░░░░███ ░░███ ░░███ ░░███  ███░░  
+ ░███░░░░░░   ░███ ░░░   ███████  ░░░█████░   ░███ ░░█████ 
+ ░███         ░███      ███░░███   ███░░░███  ░███  ░░░░███
+ █████        █████    ░░████████ █████ █████ █████ ██████ 
+░░░░░        ░░░░░      ░░░░░░░░ ░░░░░ ░░░░░ ░░░░░ ░░░░░░  
+```
+
+**Praxis** is a development framework that bridges **Intent‑Driven Development (IDD)** and **Spec‑Driven Development (SDD)** into a single, coherent workflow.
 
 It relays on [Intended](https://github.com/Nom-nom-hub/Intended) and [OpenSpec](https://github.com/Fission-AI/OpenSpec).
 
@@ -88,11 +99,16 @@ Praxis continuously checks for **semantic drift**:
 * CLI commands that can be mapped to IDE AI chats
 * Optional exposure as a local command server (e.g. MCP‑style)
 
----
-
-## Supported Commands
-
-All Praxis functionality is exposed through a unified command interface.
+```
+.praxis/
+├── intents/
+│   ├── wip/             # Work-in-progress intents
+│   └── archive/         # Archived intents
+├── specs/               # Specifications (OpenSpec)
+│   ├── wip/             # Work-in-progress specs
+│   └── archive/         # Archived specs
+└── templates/           # Templates for intents and specs
+```
 
 ### Intent Commands
 

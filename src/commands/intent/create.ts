@@ -41,8 +41,8 @@ Please perform the following actions:
    - It MUST be concise (max 20 characters).
    - Example: "user-login", "export-pdf", "dark-mode".
 3. **Create the Intent File**:
-   - Create a new directory: \`.praxis/intent/<your-generated-id>/\`
-   - Create a new file: \`.praxis/intent/<your-generated-id>/intent.md\`
+   - Create a new directory: \`.praxis/intents/wip/<your-generated-id>/\`
+   - Create a new file: \`.praxis/intents/wip/<your-generated-id>/intent.md\`
 4. **Fill the Template**:
    - Use the template content provided below.
    - Smartly fill in ALL placeholders (like [FEATURE NAME], [DATE], etc.) based on the user's description.

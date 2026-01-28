@@ -6,9 +6,11 @@ export async function initCommand() {
     const praxisDir = path.join(rootDir, '.praxis');
     const templatesDir = path.join(praxisDir, 'templates');
     const intentsDir = path.join(praxisDir, 'intents');
+    const intentsWipDir = path.join(praxisDir, 'intents', 'wip');
+    const intentsArchiveDir = path.join(praxisDir, 'intents', 'archive');
     const specsDir = path.join(praxisDir, 'specs');
 
-    const dirs = [praxisDir, templatesDir, intentsDir, specsDir];
+    const dirs = [praxisDir, templatesDir, intentsDir, intentsWipDir, intentsArchiveDir, specsDir];
 
     for (const dir of dirs) {
         if (!fs.existsSync(dir)) {
@@ -41,5 +43,5 @@ export async function initCommand() {
     }
 
     console.log('\nPraxis project structure initialized successfully!');
-    console.log('You can now start defining intents in .praxis/intents/');
+    console.log('You can now start defining intents in .praxis/intents/wip/');
 }
