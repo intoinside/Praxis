@@ -3,6 +3,7 @@ import { Command } from 'commander';
 import { manifest } from './manifest.js';
 import { initCommand } from './commands/init.js';
 import { intentCreateAction } from './commands/intent/create.js';
+import { intentListAction } from './commands/intent/list.js';
 import { generateSlashCommandsAction } from './commands/integration/generate.js';
 
 const program = new Command();
@@ -38,6 +39,8 @@ manifest.forEach((cmdDef) => {
                 if (cmdDef.name === 'intent' && subCmdDef.name === 'create') {
                     const [description] = args;
                     await intentCreateAction(description);
+                } else if (cmdDef.name === 'intent' && subCmdDef.name === 'list') {
+                    await intentListAction();
                 } else if (cmdDef.name === 'integration' && subCmdDef.name === 'generate-slash-commands') {
                     const [tool] = args;
                     await generateSlashCommandsAction(tool);
