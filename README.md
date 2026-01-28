@@ -99,6 +99,8 @@ Praxis continuously checks for **semantic drift**:
 * CLI commands that can be mapped to IDE AI chats
 * Optional exposure as a local command server (e.g. MCP‑style)
 
+## Folder structure
+
 ```
 .praxis/
 ├── intents/
