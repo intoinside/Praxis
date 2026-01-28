@@ -1,6 +1,8 @@
 # Praxis
 
-**Praxis** is an intent-first development framework that bridges **Intent‑Driven Development (IDD)** and **Spec‑Driven Development (SDD)** into a single, coherent workflow.
+**Praxis** is an development framework that bridges **Intent‑Driven Development (IDD)** and **Spec‑Driven Development (SDD)** into a single, coherent workflow.
+
+It relays on [Intended](https://github.com/Nom-nom-hub/Intended) and [OpenSpec](https://github.com/Fission-AI/OpenSpec).
 
 Praxis helps teams start from *why* they are building something, derive *what* must be built in the form of explicit specifications, and continuously verify that the *how* (the code) never diverges from the original intent.
 
@@ -239,11 +241,11 @@ The following diagram illustrates how **Intents** and **Specifications** integra
         └─────┬──────┘
               │
               ▼
-     ┌─────────────────┐
-     │ Intent Modeling │
-     │ (Capabilities,  │
-     │  Events, States)│
-     └────────┬────────┘
+     ┌──────────────────┐
+     │ Intent Modeling  │
+     │ (Capabilities,   │
+     │  Events, States) │
+     └────────┬─────────┘
               │
               ▼
         ┌────────────┐
