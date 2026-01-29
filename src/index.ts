@@ -6,6 +6,8 @@ import { intentCreateAction } from './commands/intent/create.js';
 import { intentListAction } from './commands/intent/list.js';
 import { generateSlashCommandsAction } from './commands/integration/generate.js';
 
+import { specDeriveAction } from './commands/spec/derive.js';
+
 const program = new Command();
 
 program
@@ -44,6 +46,9 @@ manifest.forEach((cmdDef) => {
                 } else if (cmdDef.name === 'integration' && subCmdDef.name === 'generate-slash-commands') {
                     const [tool] = args;
                     await generateSlashCommandsAction(tool);
+                } else if (cmdDef.name === 'spec' && subCmdDef.name === 'derive') {
+                    const [options] = args;
+                    await specDeriveAction(options);
                 } else {
                     console.log(`Executing ${cmdDef.name} ${subCmdDef.name}...`);
                     // Implementation will go here
