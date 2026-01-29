@@ -114,123 +114,52 @@ Praxis continuously checks for **semantic drift**:
 
 ### Intent Commands
 
-```bash
-praxis init
-```
-
-Initialize a new project to be used with Praxis. Templates are provided in the `templates` directory.
-
-```bash
-praxis intent create <intent-description>
-```
-
-Create a new intent.
-
-```bash
-praxis intent update <intent-id>
-```
-
-Update an existing intent.
-
-```bash
-praxis intent validate
-```
-
-Validate all intents for completeness and consistency.
-
-```bash
-praxis intent list
-```
-
-List all defined intents.
-
-```bash
-praxis intent check
-```
-
-Verify that current specs and code still satisfy all intents.
+|Command|Description|Status/Version|
+|-|-|-|
+|`praxis init`|Initialize a new project to be used with Praxis. Templates are provided in the `templates` directory.|✅|
+|`praxis intent create <intent-description>`|Create a new intent.|✅|
+|`praxis intent update <intent-id>`|Update an existing intent.|❌|
+|`praxis intent validate`|Validate all intents for completeness and consistency.|❌|
+|`praxis intent list`|List all defined intents.|✅|
 
 ---
 
 ### Intent Modeling Commands
 
-```bash
-praxis intent model <intent-id>
-```
-
-Generate or update the intent model (capabilities, events, states).
+|Command|Description|Status/Version|
+|-|-|-|
+|`praxis intent model <intent-id>`|Generate or update the intent model (capabilities, events, states).|❌|
 
 ---
 
 ### Specification Commands
 
-```bash
-praxis spec derive --from <intent-id>
-```
-
-Generate initial specifications from an intent or intent model.
-
-```bash
-praxis spec refine <spec-id>
-```
-
-Manually refine a specification while preserving intent traceability.
-
-```bash
-praxis spec validate
-```
-
-Validate specs for internal consistency and completeness.
-
-```bash
-praxis spec lock <spec-id>
-```
-
-Lock a specification as a formal contract.
-
-```bash
-praxis spec list
-```
-
-List all specifications and their associated intents.
-
-```bash
-praxis spec check
-```
-
-Verify implementation compliance against locked specs.
+|Command|Description|Status/Version|
+|-|-|-|
+|`praxis spec derive --from <intent-id>`|Generate initial specifications from an intent or intent model.|❌|
+|`praxis spec refine <spec-id>`|Manually refine a specification while preserving intent traceability.|❌|
+|`praxis spec validate`|Validate specs for internal consistency and completeness.|❌|
+|`praxis spec lock <spec-id>`|Lock a specification as a formal contract.|❌|
+|`praxis spec list`|List all specifications and their associated intents.|❌|
+|`praxis spec check`|Verify implementation compliance against locked specs.|❌|
 
 ---
 
 ### Analysis Commands
 
-```bash
-praxis analyze impact --intent <intent-id>
-```
-
-Analyze the impact of changes to an intent on specs and code.
-
-```bash
-praxis analyze drift
-```
-
-Detect intent/spec/code drift.
+|Command|Description|Status/Version|
+|-|-|-|
+|`praxis analyze impact --intent <intent-id>`|Analyze the impact of changes to an intent on specs and code.|❌|
+|`praxis analyze drift`|Detect intent/spec/code drift.|❌|
 
 ---
 
 ### Integration & Runtime Commands
 
-```bash
-praxis serve
-```
-
-Expose Praxis commands through a local service for IDE or AI integration.
-
-```bash
-praxis commands
-```
-
-List all available commands in machine‑readable form.
+|Command|Description|Status/Version|
+|-|-|-|
+|`praxis serve`|Expose Praxis commands through a local service for IDE or AI integration.|❌|
+|`praxis commands`|List all available commands in machine‑readable form.|❌|
 
 ---
 
@@ -239,9 +168,9 @@ List all available commands in machine‑readable form.
 When integrated into an IDE or AI‑enabled editor, Praxis commands can be invoked as slash commands:
 
 ```
-/praxis intent create
-/praxis spec derive
-/praxis intent check
+/praxis-intent-create
+/praxis-spec-derive
+/praxis-intent-check
 ```
 
 The underlying behavior is identical to the CLI.
@@ -255,6 +184,7 @@ The following diagram illustrates how **Intents** and **Specifications** integra
 ```
         ┌────────────┐
         │   Intent   │
+        │   (WHAT)   │
         │   (WHY)    │
         └─────┬──────┘
               │
