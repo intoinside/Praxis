@@ -136,12 +136,12 @@ Praxis continuously checks for **semantic drift**:
 
 |Command|Description|Status/Version|
 |-|-|-|
-|`praxis spec derive --from <intent-id>`|Generate initial specifications from an intent or intent model.|✅|
+|`praxis spec derive --from-intent <intent-id>`|Generate initial specifications from an intent.|✅|
 |`praxis spec refine <spec-id>`|Manually refine a specification while preserving intent traceability.|❔​|
 |`praxis spec validate <spec-id>`|Validate specs for internal consistency and completeness.|❌|
 |`praxis spec apply <spec-id>`|Implement a specification in code.|❌|
 |`praxis spec archive <spec-id>`|Archive a specification implemented.|❌|
-|`praxis spec delete --spec <spec-id>`|Delete a specific spec.|❌|
+|`praxis spec delete <spec-id>`|Delete a specific spec.|✅|
 |`praxis spec delete --from-intent <intent-id>`|Delete all specs generated from an intent.|❌|
 |`praxis spec lock <spec-id>`|Lock a specification as a formal contract.|❔​|
 |`praxis spec list --from-intent <intent-id>`|List all specifications and their associated intents.|❌|
