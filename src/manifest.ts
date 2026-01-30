@@ -104,6 +104,17 @@ export const manifest: CommandDefinition[] = [
         name: 'check',
         description: 'Verify implementation compliance against locked specs',
       },
+      {
+        name: 'delete',
+        description: 'Delete a specification and its artifacts',
+        arguments: [
+          {
+            name: 'spec-id',
+            description: 'The ID of the spec to delete',
+            required: true,
+          },
+        ],
+      },
     ],
   },
   {
