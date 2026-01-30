@@ -118,7 +118,7 @@ Praxis continuously checks for **semantic drift**:
 |-|-|-|
 |`praxis init`|Initialize a new project to be used with Praxis. Templates are provided in the `templates` directory.|✅|
 |`praxis intent create <intent-description>`|Create a new intent.|✅|
-|`praxis intent update <intent-id>`|Update an existing intent.|❌|
+|`praxis intent update <intent-id>`|Update an existing intent.|❔​|
 |`praxis intent validate`|Validate all intents for completeness and consistency.|❌|
 |`praxis intent list`|List all defined intents.|✅|
 
@@ -128,7 +128,7 @@ Praxis continuously checks for **semantic drift**:
 
 |Command|Description|Status/Version|
 |-|-|-|
-|`praxis intent model <intent-id>`|Generate or update the intent model (capabilities, events, states).|❌|
+|`praxis intent model <intent-id>`|Generate or update the intent model (capabilities, events, states).|❔​|
 
 ---
 
@@ -136,12 +136,16 @@ Praxis continuously checks for **semantic drift**:
 
 |Command|Description|Status/Version|
 |-|-|-|
-|`praxis spec derive --from <intent-id>`|Generate initial specifications from an intent or intent model.|❌|
-|`praxis spec refine <spec-id>`|Manually refine a specification while preserving intent traceability.|❌|
-|`praxis spec validate`|Validate specs for internal consistency and completeness.|❌|
-|`praxis spec lock <spec-id>`|Lock a specification as a formal contract.|❌|
-|`praxis spec list`|List all specifications and their associated intents.|❌|
-|`praxis spec check`|Verify implementation compliance against locked specs.|❌|
+|`praxis spec derive --from <intent-id>`|Generate initial specifications from an intent or intent model.|✅|
+|`praxis spec refine <spec-id>`|Manually refine a specification while preserving intent traceability.|❔​|
+|`praxis spec validate <spec-id>`|Validate specs for internal consistency and completeness.|❌|
+|`praxis spec apply <spec-id>`|Implement a specification in code.|❌|
+|`praxis spec archive <spec-id>`|Archive a specification implemented.|❌|
+|`praxis spec delete --spec <spec-id>`|Delete a specific spec.|❌|
+|`praxis spec delete --from-intent <intent-id>`|Delete all specs generated from an intent.|❌|
+|`praxis spec lock <spec-id>`|Lock a specification as a formal contract.|❔​|
+|`praxis spec list --from-intent <intent-id>`|List all specifications and their associated intents.|❌|
+|`praxis spec check`|Verify implementation compliance against locked specs.|❔​|
 
 ---
 
@@ -149,8 +153,8 @@ Praxis continuously checks for **semantic drift**:
 
 |Command|Description|Status/Version|
 |-|-|-|
-|`praxis analyze impact --intent <intent-id>`|Analyze the impact of changes to an intent on specs and code.|❌|
-|`praxis analyze drift`|Detect intent/spec/code drift.|❌|
+|`praxis analyze impact --from-intent <intent-id>`|Analyze the impact of changes to an intent on specs and code.|❔​|
+|`praxis analyze drift`|Detect intent/spec/code drift.|❔​|
 
 ---
 
@@ -158,8 +162,8 @@ Praxis continuously checks for **semantic drift**:
 
 |Command|Description|Status/Version|
 |-|-|-|
-|`praxis serve`|Expose Praxis commands through a local service for IDE or AI integration.|❌|
-|`praxis commands`|List all available commands in machine‑readable form.|❌|
+|`praxis serve`|Expose Praxis commands through a local service for IDE or AI integration.|❔​|
+|`praxis commands`|List all available commands in machine‑readable form.|❔​|
 
 ---
 
