@@ -116,6 +116,17 @@ export const manifest: CommandDefinition[] = [
         ],
       },
       {
+        name: 'archive',
+        description: 'Archive a specification',
+        arguments: [
+          {
+            name: 'spec-id',
+            description: 'The ID of the spec to archive',
+            required: true,
+          },
+        ],
+      },
+      {
         name: 'apply',
         description: 'Implement a specification',
         arguments: [
