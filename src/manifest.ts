@@ -115,6 +115,17 @@ export const manifest: CommandDefinition[] = [
           },
         ],
       },
+      {
+        name: 'apply',
+        description: 'Implement a specification',
+        arguments: [
+          {
+            name: 'spec-id',
+            description: 'The ID of the spec to apply',
+            required: true,
+          },
+        ],
+      },
     ],
   },
   {
