@@ -8,6 +8,7 @@ import { generateSlashCommandsAction } from './commands/integration/generate.js'
 
 import { specDeriveAction } from './commands/spec/derive.js';
 import { specDeleteAction } from './commands/spec/delete.js';
+import { specApplyAction } from './commands/spec/apply.js';
 
 const program = new Command();
 
@@ -53,6 +54,9 @@ manifest.forEach((cmdDef) => {
                 } else if (cmdDef.name === 'spec' && subCmdDef.name === 'delete') {
                     const [specId] = args;
                     await specDeleteAction(specId);
+                } else if (cmdDef.name === 'spec' && subCmdDef.name === 'apply') {
+                    const [specId] = args;
+                    await specApplyAction(specId);
                 } else {
                     console.log(`Executing ${cmdDef.name} ${subCmdDef.name}...`);
                     // Implementation will go here
