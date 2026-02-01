@@ -1,15 +1,13 @@
 import fs from 'fs';
 import path from 'path';
-
 /**
  * Action for 'praxis spec derive --from <intent-id>'
  */
-export async function specDeriveAction(options: { fromIntent: string }) {
+export async function specDeriveAction(options) {
     const intentId = options.fromIntent;
     const rootDir = process.cwd();
     const intentsDir = path.join(rootDir, '.praxis', 'intents');
     const templatePath = path.join(rootDir, '.praxis', 'templates', 'spec-template.md');
-
     // 1. Validate environment
     if (!fs.existsSync(intentsDir)) {
         console.error('Error: Intents directory not found (.praxis/intents).');
@@ -19,21 +17,17 @@ export async function specDeriveAction(options: { fromIntent: string }) {
         console.error(`Error: Spec template not found at ${templatePath}`);
         return;
     }
-
     // 2. Find intent file
     const intentFile = findIntentFile(intentsDir, intentId);
     if (!intentFile) {
         console.error(`Error: Intent with ID '${intentId}' not found.`);
         return;
     }
-
     // 3. Read content
     const intentContent = fs.readFileSync(intentFile, 'utf8');
     const templateContent = fs.readFileSync(templatePath, 'utf8');
-
     // 4. Generate Prompt
     const prompt = generateAiPrompt(intentId, intentContent, templateContent);
-
     // 5. Output
     console.log('\n--- IDE AI CHAT PROMPT ---');
     console.log('Copy and paste the following into your IDE chat to generate the specification:');
@@ -41,22 +35,18 @@ export async function specDeriveAction(options: { fromIntent: string }) {
     console.log(prompt);
     console.log('--------------------------\n');
 }
-
-function findIntentFile(dir: string, targetId: string): string | null {
+function findIntentFile(dir, targetId) {
     try {
         const list = fs.readdirSync(dir);
-
         // Check if direct match exists (optimization)
         const directPath = path.join(dir, targetId, 'intent.md');
         if (fs.existsSync(directPath)) {
             return directPath;
         }
-
         // Recursive search
         for (const file of list) {
             const filePath = path.join(dir, file);
             const stat = fs.statSync(filePath);
-
             if (stat.isDirectory()) {
                 // If the directory name *is* the ID, check for intent.md inside
                 if (file === targetId) {
@@ -65,19 +55,19 @@ function findIntentFile(dir: string, targetId: string): string | null {
                         return potentialIntent;
                     }
                 }
-
                 // Otherwise recurse
                 const found = findIntentFile(filePath, targetId);
-                if (found) return found;
+                if (found)
+                    return found;
             }
         }
-    } catch (e) {
+    }
+    catch (e) {
         // Ignore permission errors etc during search
     }
     return null;
 }
-
-function generateAiPrompt(intentId: string, intentContent: string, templateContent: string): string {
+function generateAiPrompt(intentId, intentContent, templateContent) {
     return `You are an expert software architect and product owner.
 I need to generate a specific technical specification (Spec) for an Intent in my project.
 
@@ -99,7 +89,7 @@ To keep things organized, every Spec needs a unique identifier.
     -   Do NOT change the structure of the template.
     -   Set Status to "Draft".
 4.  **Output** the full Markdown content of the new specification file.
-    -   **Important**: The file path MUST be: \`.praxis/specs/<intent-id>/<your-generated-spec-id>/spec.md\`
+    -   **Important**: The file path MUST be: \`.praxis/specs/<intent-id><your-generated-spec-id>/spec.md\`
 
 ---
 **INTENT CONTENT**:

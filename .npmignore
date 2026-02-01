@@ -1,0 +1,13 @@
+node_modules/
+.git/
+.praxis/
+.agent/
+.DS_Store
+*.log
+test/
+.env
+CODE_OF_CONDUCT.md
+CONTRIBUTING.md
+MAINTAINERS.md
+last_error.txt
+test_output.txt

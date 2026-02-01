@@ -78,7 +78,7 @@ export const manifest: CommandDefinition[] = [
         description: 'Generate initial specifications from an intent or intent model',
         options: [
           {
-            name: 'from',
+            name: 'from-intent',
             description: 'The ID of the intent or model to derive from',
             required: true,
           },
