@@ -2,16 +2,23 @@
   "name": "@intoinside/praxis",
   "version": "1.0.5",
   "description": "**Praxis** is an intent-first development framework that bridges **Intent‑Driven Development (IDD)** and **Spec‑Driven Development (SDD)** into a single, coherent workflow.",
-  "main": "src/index.js",
-  "types": "src/index.d.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "bin": {
-    "praxis": "src/index.js"
+    "praxis": "dist/index.js"
   },
+  "files": [
+    "dist",
+    "templates",
+    "README.md",
+    "LICENSE"
+  ],
   "dependencies": {
     "commander": "^14.0.2"
   },
   "scripts": {
     "build": "tsc",
+    "clean": "rimraf dist",
     "prepublishOnly": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -36,6 +43,7 @@
   "homepage": "https://github.com/intoinside/Praxis#readme",
   "devDependencies": {
     "@types/node": "^25.0.10",
+    "rimraf": "^6.0.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
   }

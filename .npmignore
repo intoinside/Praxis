@@ -11,3 +11,9 @@ CONTRIBUTING.md
 MAINTAINERS.md
 last_error.txt
 test_output.txt
+
+# Source files
+src/
+tsconfig.json
+package-lock.json
+assets/
