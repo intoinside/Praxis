@@ -20,7 +20,8 @@
     "build": "tsc",
     "clean": "rimraf dist",
     "prepublishOnly": "npm run build",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "vitest run",
+    "coverage": "vitest run --coverage"
   },
   "repository": {
     "type": "git",
@@ -32,7 +33,9 @@
     "intent",
     "spec",
     "intent-driven",
-    "spec-driven"
+    "spec-driven",
+    "intent-driven development",
+    "spec-driven development"
   ],
   "author": "Raffaele Intorcia",
   "license": "MIT",
@@ -43,8 +46,10 @@
   "homepage": "https://github.com/intoinside/Praxis#readme",
   "devDependencies": {
     "@types/node": "^25.0.10",
+    "@vitest/coverage-v8": "^4.0.18",
     "rimraf": "^6.0.1",
     "ts-node": "^10.9.2",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.18"
   }
 }

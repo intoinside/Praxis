@@ -33,11 +33,11 @@ export async function specArchiveAction(specId: string) {
     if (fs.existsSync(specMdPath)) {
         try {
             let content = fs.readFileSync(specMdPath, 'utf-8');
-            // Simple regex to replace State: ... with State: Archived
-            // Supporting both "State: Draft" and "State:Draft"
-            const newState = 'State: Archived';
-            if (content.match(/^State:\s*.*$/m)) {
-                content = content.replace(/^State:\s*.*$/m, newState);
+            // Simple regex to replace Status: ... with Status: Archived
+            // Supporting both "Status: Draft" and "Status:Draft"
+            const newState = 'Status: Archived';
+            if (content.match(/^\*\*Status\*\*:\s*.*$/m)) {
+                content = content.replace(/^\*\*Status\*\*:\s*.*$/m, newState);
             } else {
                 // If no state found, maybe just append it or warn?
                 // Most specs should have a state. Let's prepend it if it looks like frontmatter.
