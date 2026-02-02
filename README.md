@@ -27,6 +27,10 @@ It is designed to be:
 
 ## Core Concepts
 
+![Intent-driven-part](./assets/images/Praxis-Intent-driven.jpg)
+
+![Spec-driven-part](./assets/images/Praxis-Spec-driven.jpg)
+
 ### Intent
 
 An **Intent** describes the purpose, value, and constraints of a feature or system.
