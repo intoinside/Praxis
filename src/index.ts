@@ -1,4 +1,7 @@
 #!/usr/bin/env node
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import { Command } from 'commander';
 import { manifest } from './manifest.js';
 import { initCommand } from './commands/init.js';
@@ -11,12 +14,16 @@ import { specDeleteAction } from './commands/spec/delete.js';
 import { specApplyAction } from './commands/spec/apply.js';
 import { specArchiveAction } from './commands/spec/archive.js';
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const packageJsonPath = path.resolve(__dirname, '../package.json');
+const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
+
 const program = new Command();
 
 program
     .name('praxis')
     .description('Praxis: Intent-First Development Framework')
-    .version('1.0.0');
+    .version(packageJson.version);
 
 // Dynamically build commands from manifest
 manifest.forEach((cmdDef) => {
