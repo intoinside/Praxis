@@ -99,6 +99,13 @@ export const manifest: CommandDefinition[] = [
       {
         name: 'list',
         description: 'List all specifications and their associated intents',
+        options: [
+          {
+            name: 'from-intent',
+            description: 'The ID of the intent to list specs for',
+            required: false,
+          },
+        ],
       },
       {
         name: 'check',

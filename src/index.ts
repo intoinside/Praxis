@@ -13,6 +13,7 @@ import { specDeriveAction } from './commands/spec/derive.js';
 import { specDeleteAction } from './commands/spec/delete.js';
 import { specApplyAction } from './commands/spec/apply.js';
 import { specArchiveAction } from './commands/spec/archive.js';
+import { specListAction } from './commands/spec/list.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const packageJsonPath = path.resolve(__dirname, '../package.json');
@@ -68,6 +69,9 @@ manifest.forEach((cmdDef) => {
                 } else if (cmdDef.name === 'spec' && subCmdDef.name === 'archive') {
                     const [specId] = args;
                     await specArchiveAction(specId);
+                } else if (cmdDef.name === 'spec' && subCmdDef.name === 'list') {
+                    const [options] = args;
+                    await specListAction(options);
                 } else {
                     console.log(`Executing ${cmdDef.name} ${subCmdDef.name}...`);
                     // Implementation will go here
