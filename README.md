@@ -128,7 +128,7 @@ List is a wip and may change in future.
 
 |Command|Description|Status/Version|
 |-|-|-|
-|`praxis init`|Initialize a new project to be used with Praxis. Templates are provided in the `templates` directory.|✅|
+|`praxis init <project-name>`|Initialize a new project to be used with Praxis. Templates are provided in the `templates` directory.|✅|
 |`praxis intent create <intent-description>`|Create a new intent.|✅|
 |`praxis intent update <intent-id>`|Update an existing intent.|❔​|
 |`praxis intent validate`|Validate all intents for completeness and consistency.|❌|
