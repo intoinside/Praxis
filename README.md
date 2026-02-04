@@ -116,6 +116,14 @@ Praxis continuously checks for **semantic drift**:
 └── templates/           # Templates for intents and specs
 ```
 
+## Command available 
+
+✅ - already implemented
+❌ - not yet implemented
+❔ - not sure if it will be implemented
+
+List is a wip and may change in future.
+
 ### Intent Commands
 
 |Command|Description|Status/Version|
@@ -192,8 +200,8 @@ The following diagram illustrates how **Intents** and **Specifications** integra
 ```
         ┌────────────┐
         │   Intent   │
-        │   (WHAT)   │
         │   (WHY)    │
+        │            │
         └─────┬──────┘
               │
               ▼

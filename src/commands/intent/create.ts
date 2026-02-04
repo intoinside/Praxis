@@ -31,7 +31,7 @@ export async function intentCreateAction(description: string) {
  */
 export function generateAiPrompt(description: string, templateContent: string): string {
     return `You are an expert product manager and software architect.
-I need to create a new Intent in my Praxis project for the following feature:
+I need to create a new Intent in my project for the following feature:
 "${description}"
 
 Please perform the following actions:
