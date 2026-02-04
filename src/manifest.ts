@@ -24,6 +24,13 @@ export const manifest: CommandDefinition[] = [
   {
     name: 'init',
     description: 'Initialize a new project to be used with Praxis',
+    arguments: [
+      {
+        name: 'name',
+        description: 'The name of the project',
+        required: false,
+      }
+    ]
   },
   {
     name: 'intent',

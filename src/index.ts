@@ -94,9 +94,10 @@ manifest.forEach((cmdDef) => {
             });
         }
 
-        cmd.action(async () => {
+        cmd.action(async (...args: any[]) => {
             if (cmdDef.name === 'init') {
-                await initCommand();
+                const [projectName] = args;
+                await initCommand(projectName);
             } else {
                 console.log(`Executing ${cmdDef.name}...`);
                 // Implementation will go here

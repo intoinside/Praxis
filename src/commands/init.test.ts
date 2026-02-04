@@ -17,14 +17,25 @@ describe('initCommand', () => {
             if (p.toString().includes('templates') && !p.toString().includes('.praxis')) return true;
             return false;
         });
-        vi.mocked(fs.readdirSync).mockReturnValue(['template1.md'] as any);
+        vi.mocked(fs.readdirSync).mockImplementation((p) => {
+            if (p.toString().includes('templates') && !p.toString().includes('.praxis')) {
+                return ['product-tech-info-template.md', 'template1.md'] as any;
+            }
+            return [] as any;
+        });
         vi.mocked(fs.statSync).mockReturnValue({ isFile: () => true } as any);
+        vi.mocked(fs.readFileSync).mockReturnValue('Mocked template content with - **Project name**: placeholder' as any);
 
-        await initCommand();
+        await initCommand('TestProject');
 
         expect(fs.mkdirSync).toHaveBeenCalled();
         expect(fs.writeFileSync).toHaveBeenCalled();
-        expect(fs.copyFileSync).toHaveBeenCalled();
+        expect(fs.readFileSync).toHaveBeenCalled();
+        // Check if product-tech-info.md was generated with the correct project name
+        expect(fs.writeFileSync).toHaveBeenCalledWith(
+            expect.stringContaining('product-tech-info.md'),
+            expect.stringContaining('Project name**: TestProject')
+        );
         expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('initialized successfully'));
     });
 

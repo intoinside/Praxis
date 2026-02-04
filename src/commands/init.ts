@@ -4,7 +4,7 @@ import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-export async function initCommand() {
+export async function initCommand(projectName?: string) {
     const rootDir = process.cwd();
     const praxisDir = path.join(rootDir, '.praxis');
     const templatesDir = path.join(praxisDir, 'templates');
@@ -29,6 +29,8 @@ export async function initCommand() {
 
     // Copy templates from package templates/ to .praxis/templates/
     const sourceTemplatesDir = path.resolve(__dirname, '../../templates');
+    let techInfoTemplateContent = '';
+
     if (fs.existsSync(sourceTemplatesDir)) {
         console.log('\nCopying templates...');
         const templateFiles = fs.readdirSync(sourceTemplatesDir);
@@ -37,12 +39,27 @@ export async function initCommand() {
             const targetPath = path.join(templatesDir, file);
 
             if (fs.statSync(sourcePath).isFile()) {
-                fs.copyFileSync(sourcePath, targetPath);
+                const content = fs.readFileSync(sourcePath, 'utf8');
+                if (file === 'product-tech-info-template.md') {
+                    techInfoTemplateContent = content;
+                }
+                fs.writeFileSync(targetPath, content);
                 console.log(`- Copied: ${file}`);
             }
         }
     } else {
         console.log('\nNo source templates directory found at root. Skipping template copy.');
+    }
+
+    // Generate product-tech-info.md
+    if (techInfoTemplateContent) {
+        let content = techInfoTemplateContent;
+        if (projectName) {
+            content = content.replace(/- \*\*Project name\*\*:/, `- **Project name**: ${projectName}`);
+        }
+        const techInfoPath = path.join(praxisDir, 'product-tech-info.md');
+        fs.writeFileSync(techInfoPath, content);
+        console.log(`\nGenerated product tech info: ${path.relative(rootDir, techInfoPath)}`);
     }
 
     console.log('\nPraxis project structure initialized successfully!');
