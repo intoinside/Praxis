@@ -156,7 +156,7 @@ List is a wip and may change in future.
 |`praxis spec delete <spec-id>`|Delete a specific spec.|✅|
 |`praxis spec delete --from-intent <intent-id>`|Delete all specs generated from an intent.|❌|
 |`praxis spec lock <spec-id>`|Lock a specification as a formal contract.|❔​|
-|`praxis spec list --from-intent <intent-id>`|List all specifications and their associated intents.|❌|
+|`praxis spec list --from-intent <intent-id>`|List all specifications and their associated intents.|✅|
 |`praxis spec check`|Verify implementation compliance against locked specs.|❔​|
 
 ---
