@@ -53,7 +53,14 @@ export const manifest: CommandDefinition[] = [
       },
       {
         name: 'validate',
-        description: 'Validate all intents for completeness and consistency',
+        description: 'Validate an intent for completeness and consistency',
+        arguments: [
+          {
+            name: 'intent-id',
+            description: 'The ID of the intent to validate',
+            required: true,
+          }
+        ]
       },
       {
         name: 'list',
