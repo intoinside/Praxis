@@ -7,6 +7,7 @@ import { manifest } from './manifest.js';
 import { initCommand } from './commands/init.js';
 import { intentCreateAction } from './commands/intent/create.js';
 import { intentListAction } from './commands/intent/list.js';
+import { intentValidateAction } from './commands/intent/validate.js';
 import { generateSlashCommandsAction } from './commands/integration/generate.js';
 
 import { specDeriveAction } from './commands/spec/derive.js';
@@ -54,6 +55,9 @@ manifest.forEach((cmdDef) => {
                     await intentCreateAction(description);
                 } else if (cmdDef.name === 'intent' && subCmdDef.name === 'list') {
                     await intentListAction();
+                } else if (cmdDef.name === 'intent' && subCmdDef.name === 'validate') {
+                    const [intentId] = args;
+                    await intentValidateAction(intentId);
                 } else if (cmdDef.name === 'integration' && subCmdDef.name === 'generate-slash-commands') {
                     const [tool] = args;
                     await generateSlashCommandsAction(tool);
