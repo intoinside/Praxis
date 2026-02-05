@@ -20,10 +20,11 @@ describe('intentValidateAction', () => {
 
         // Mock existsSync for different paths
         vi.mocked(fs.existsSync).mockImplementation((p) => {
-            if (p.toString().includes('.praxis' + path.sep + 'intents')) return true;
-            if (p.toString().includes('intent-template.md')) return true;
-            if (p.toString().includes('intent.md')) return true;
-            if (p.toString().includes(intentId)) return true;
+            const pStr = p.toString();
+            if (pStr.endsWith('.praxis' + path.sep + 'intents')) return true;
+            if (pStr.includes('intent-template.md')) return true;
+            if (pStr.endsWith('intent.md')) return true;
+            if (pStr.endsWith(intentId)) return true;
             return false;
         });
 
@@ -54,7 +55,8 @@ describe('intentValidateAction', () => {
         const intentId = 'missing-intent';
 
         vi.mocked(fs.existsSync).mockImplementation((p) => {
-            if (p.toString().includes('.praxis' + path.sep + 'intents')) return true;
+            const pStr = p.toString();
+            if (pStr.endsWith('.praxis' + path.sep + 'intents')) return true;
             return false;
         });
         vi.mocked(fs.readdirSync).mockImplementation((p) => {
