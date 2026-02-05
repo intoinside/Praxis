@@ -105,6 +105,13 @@ export const manifest: CommandDefinition[] = [
       {
         name: 'validate',
         description: 'Validate specs for internal consistency and completeness',
+        arguments: [
+          {
+            name: 'spec-id',
+            description: 'The ID of the spec to validate',
+            required: true,
+          },
+        ],
       },
       {
         name: 'lock',

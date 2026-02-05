@@ -131,7 +131,7 @@ List is a wip and may change in future.
 |`praxis init <project-name>`|Initialize a new project to be used with Praxis. Templates are provided in the `templates` directory.|✅|
 |`praxis intent create <intent-description>`|Create a new intent.|✅|
 |`praxis intent update <intent-id>`|Update an existing intent.|❔​|
-|`praxis intent validate <intent-id>`|Validate all intents for completeness and consistency.|❌|
+|`praxis intent validate <intent-id>`|Validate all intents for completeness and consistency.|✅|
 |`praxis intent list`|List all defined intents.|✅|
 
 ---
@@ -150,7 +150,7 @@ List is a wip and may change in future.
 |-|-|-|
 |`praxis spec derive --from-intent <intent-id>`|Generate initial specifications from an intent.|✅|
 |`praxis spec refine <spec-id>`|Manually refine a specification while preserving intent traceability.|❔​|
-|`praxis spec validate <spec-id>`|Validate specs for internal consistency and completeness.|❌|
+|`praxis spec validate <spec-id>`|Validate specs for internal consistency and completeness.|✅|
 |`praxis spec apply <spec-id>`|Implement a specification in code.|✅|
 |`praxis spec archive <spec-id>`|Archive a specification implemented.|✅|
 |`praxis spec delete <spec-id>`|Delete a specific spec.|✅|
