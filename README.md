@@ -27,10 +27,6 @@ It is designed to be:
 
 ## Core Concepts
 
-![Intent-driven-part](./assets/images/Praxis-Intent-driven.jpg)
-
-![Spec-driven-part](./assets/images/Praxis-Spec-driven.jpg)
-
 ### Intent
 
 An **Intent** describes the purpose, value, and constraints of a feature or system.
@@ -102,6 +98,49 @@ Praxis continuously checks for **semantic drift**:
 * Slash‑command friendly design
 * CLI commands that can be mapped to IDE AI chats
 * Optional exposure as a local command server (e.g. MCP‑style)
+
+## Suggested workflow
+
+![Intent-driven-part](./assets/images/Praxis-Intent-driven.jpg)
+
+![Spec-driven-part](./assets/images/Praxis-Spec-driven.jpg)
+
+- `praxis init my-project` - Initializing Praxis on a project 
+  
+  This command will create the product-info and product-tech-info artifacts. The user should review and, if necessary, modify the contents of the documents.
+
+- `praxis intent create <intent-description>` - Intent creation
+  
+  This command will create a new intent based on the description provided by the user. The intent will be created in the `wip` directory of the `.praxis/intents` folder. User must review and, if necessary, modify the contents of the intent.
+
+- `praxis intent validate <intent-id>` - Intent validation
+  
+  This command will validate the intent, after the user edit, for completeness and consistency.
+
+- `praxis spec derive --from-intent <intent-id>` - Spec derivation from intent
+  
+  This command will derive a spec (or more than one) from an intent. The specification will be created in the `wip` directory of the `.praxis/specs` folder. User must review and, if necessary, modify the contents of the specification.
+  Specs are generated in **draft** status.
+
+- `praxis spec validate <spec-id>` - Spec validation
+  
+  User can edit the spec. Once the user is satisfied with the spec, they can validate it. This command will validate the spec for completeness and consistency.
+
+- `praxis spec apply <spec-id>` - Spec implementation
+  
+  This command will apply the spec to the project. It will send spec to AI to implement it.
+
+- `praxis spec check <spec-id>` - Check if implementation satisfies spec
+  
+  This command will check if the implementation satisfies the spec.
+
+- `praxis spec archive <spec-id>` - Spec archive
+  
+  This command will archive the spec. It will move the spec from the `wip` directory to the `archive` directory.
+
+- `praxis intent archive <intent-id>` - Intent archive
+  
+  This command will archive the intent. It will move the intent from the `wip` directory to the `archive` directory. Usually, this is called then all specs derived from the intent are archived.
 
 ## Folder structure
 
@@ -193,53 +232,6 @@ The underlying behavior is identical to the CLI.
 
 ---
 
-## Development Flow Overview
-
-The following diagram illustrates how **Intents** and **Specifications** integrate into a standard development lifecycle.
-
-```
-        ┌────────────┐
-        │   Intent   │
-        │   (WHY)    │
-        │            │
-        └─────┬──────┘
-              │
-              ▼
-     ┌──────────────────┐
-     │ Intent Modeling  │
-     │ (Capabilities,   │
-     │  Events, States) │
-     └────────┬─────────┘
-              │
-              ▼
-        ┌────────────┐
-        │   Specs    │
-        │   (WHAT)   │
-        └─────┬──────┘
-              │
-   ┌──────────┼──────────┐
-   │          │          │
-   ▼          ▼          ▼
-Tests     Contracts   Scenarios
-
-              │
-              ▼
-        ┌────────────┐
-        │    Code    │
-        │   (HOW)    │
-        └─────┬──────┘
-              │
-              ▼
-     ┌─────────────────┐
-     │ Validation &    │
-     │ Drift Detection │
-     └─────┬───────────┘
-           │
-           └───────────────┐
-                           ▼
-                     Intent Check
-```
-
 ### How Praxis Fits into Daily Development
 
 * **Before coding**: intents and specs are defined and validated
@@ -286,7 +278,7 @@ npm --version
 To install Praxis globally and make the `praxis` command available system-wide:
 
 ```
-npm install -g praxis
+npm install -g @intoinside/praxis
 ```
 
 After installation, verify it works:
@@ -295,20 +287,10 @@ After installation, verify it works:
 praxis --help
 ```
 
----
-
-### Install (Project-local)
-
-You can also install Praxis as a development dependency inside a project:
+or 
 
 ```
-npm install --save-dev praxis
-```
-
-Then run it via:
-
-```
-npx praxis --help
+praxis --version
 ```
 
 ---
