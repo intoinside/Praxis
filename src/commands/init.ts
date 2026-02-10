@@ -1,17 +1,24 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import {
+    PRAXIS_DIR,
+    INTENTS_DIR,
+    SPECS_DIR,
+    TEMPLATES_DIR,
+    PRODUCT_TECH_INFO
+} from '../core/utils.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export async function initCommand(projectName?: string) {
     const rootDir = process.cwd();
-    const praxisDir = path.join(rootDir, '.praxis');
-    const templatesDir = path.join(praxisDir, 'templates');
-    const intentsDir = path.join(praxisDir, 'intents');
-    const intentsWipDir = path.join(praxisDir, 'intents', 'wip');
-    const intentsArchiveDir = path.join(praxisDir, 'intents', 'archive');
-    const specsDir = path.join(praxisDir, 'specs');
+    const praxisDir = path.join(rootDir, PRAXIS_DIR);
+    const templatesDir = path.join(rootDir, TEMPLATES_DIR);
+    const intentsDir = path.join(rootDir, INTENTS_DIR);
+    const intentsWipDir = path.join(intentsDir, 'wip');
+    const intentsArchiveDir = path.join(intentsDir, 'archive');
+    const specsDir = path.join(rootDir, SPECS_DIR);
 
     const dirs = [praxisDir, templatesDir, intentsDir, intentsWipDir, intentsArchiveDir, specsDir];
 
@@ -57,7 +64,7 @@ export async function initCommand(projectName?: string) {
         if (projectName) {
             content = content.replace(/- \*\*Project name\*\*:/, `- **Project name**: ${projectName}`);
         }
-        const techInfoPath = path.join(praxisDir, 'product-tech-info.md');
+        const techInfoPath = path.join(praxisDir, PRODUCT_TECH_INFO);
         fs.writeFileSync(techInfoPath, content);
         console.log(`\nGenerated product tech info: ${path.relative(rootDir, techInfoPath)}`);
     }

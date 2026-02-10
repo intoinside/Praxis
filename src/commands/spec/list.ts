@@ -1,19 +1,24 @@
 import fs from 'fs';
 import path from 'path';
+import {
+    findAllSpecFiles,
+    parseMetadata,
+    SPECS_DIR
+} from '../../core/utils.js';
 
 /**
  * Action for 'praxis spec list'
  */
 export async function specListAction(options: { fromIntent?: string }) {
     const rootDir = process.cwd();
-    const specsDir = path.join(rootDir, '.praxis', 'specs');
+    const specsDir = path.join(rootDir, SPECS_DIR);
 
     if (!fs.existsSync(specsDir)) {
         console.log('No specifications found (directory .praxis/specs does not exist).');
         return;
     }
 
-    const specFiles = findAllSpecFiles(specsDir);
+    const specFiles = findAllSpecFiles();
 
     // Filter by intent if provided
     let filteredSpecs = specFiles;
@@ -32,10 +37,9 @@ export async function specListAction(options: { fromIntent?: string }) {
         }
 
         const content = fs.readFileSync(file, 'utf8');
-        const statusMatch = content.match(/\*\*Status\*\*:\s*(.+)/);
-        const status = statusMatch ? statusMatch[1].trim() : '';
+        const metadata = parseMetadata(content);
 
-        return status.toLowerCase() !== 'archived';
+        return metadata.status.toLowerCase() !== 'archived';
     });
 
     if (filteredSpecs.length === 0) {
@@ -56,40 +60,10 @@ export async function specListAction(options: { fromIntent?: string }) {
         const specId = path.basename(path.dirname(file));
         const intentId = path.basename(path.dirname(path.dirname(file)));
 
-        // Parse metadata using simple regex
-        const statusMatch = content.match(/\*\*Status\*\*:\s*(.+)/);
-        const createdMatch = content.match(/\*\*Created\*\*:\s*(.+)/);
-
-        const status = statusMatch ? statusMatch[1].trim() : 'Unknown';
-        const created = createdMatch ? createdMatch[1].trim() : 'Unknown';
+        // Parse metadata
+        const metadata = parseMetadata(content);
 
         // Column formatting
-        console.log(`${intentId.padEnd(25)} ${specId.padEnd(25)} ${status.padEnd(15)} ${created}`);
+        console.log(`${intentId.padEnd(25)} ${specId.padEnd(25)} ${metadata.status.padEnd(15)} ${metadata.created}`);
     }
-}
-
-function findAllSpecFiles(dir: string): string[] {
-    let results: string[] = [];
-    try {
-        const list = fs.readdirSync(dir);
-
-        for (const file of list) {
-            const filePath = path.join(dir, file);
-            const stat = fs.statSync(filePath);
-
-            if (stat.isDirectory()) {
-                // Skip the base archive directory itself to be safe
-                if (path.basename(filePath) === 'archive' && path.dirname(filePath) === dir) {
-                    continue;
-                }
-                results = results.concat(findAllSpecFiles(filePath));
-            } else if (file === 'spec.md') {
-                results.push(filePath);
-            }
-        }
-    } catch (e) {
-        // Ignore errors during traversal
-    }
-
-    return results;
 }

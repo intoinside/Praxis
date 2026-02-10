@@ -1,11 +1,25 @@
+import { initCommand } from './commands/init.js';
+import { intentCreateAction } from './commands/intent/create.js';
+import { intentListAction } from './commands/intent/list.js';
+import { intentValidateAction } from './commands/intent/validate.js';
+import { generateSlashCommandsAction } from './commands/integration/generate.js';
+import { specDeriveAction } from './commands/spec/derive.js';
+import { specDeleteAction } from './commands/spec/delete.js';
+import { specApplyAction } from './commands/spec/apply.js';
+import { specArchiveAction } from './commands/spec/archive.js';
+import { specListAction } from './commands/spec/list.js';
+import { specValidateAction } from './commands/spec/validate.js';
+
 /**
  * Praxis Command Manifest
  * This file defines all supported commands and subcommands for the Praxis CLI.
  */
 
+
 export interface CommandDefinition {
   name: string;
   description: string;
+  action?: (...args: any[]) => Promise<void>;
   subcommands?: CommandDefinition[];
   options?: {
     name: string;
@@ -24,6 +38,7 @@ export const manifest: CommandDefinition[] = [
   {
     name: 'init',
     description: 'Initialize a new project to be used with Praxis',
+    action: initCommand,
     arguments: [
       {
         name: 'name',
@@ -39,6 +54,7 @@ export const manifest: CommandDefinition[] = [
       {
         name: 'create',
         description: 'Create a new intent',
+        action: intentCreateAction,
         arguments: [
           {
             name: 'description',
@@ -54,6 +70,7 @@ export const manifest: CommandDefinition[] = [
       {
         name: 'validate',
         description: 'Validate an intent for completeness and consistency',
+        action: intentValidateAction,
         arguments: [
           {
             name: 'intent-id',
@@ -65,6 +82,7 @@ export const manifest: CommandDefinition[] = [
       {
         name: 'list',
         description: 'List all defined intents',
+        action: intentListAction,
       },
       {
         name: 'check',
@@ -90,6 +108,7 @@ export const manifest: CommandDefinition[] = [
       {
         name: 'derive',
         description: 'Generate initial specifications from an intent or intent model',
+        action: specDeriveAction,
         options: [
           {
             name: 'from-intent',
@@ -105,6 +124,7 @@ export const manifest: CommandDefinition[] = [
       {
         name: 'validate',
         description: 'Validate specs for internal consistency and completeness',
+        action: specValidateAction,
         arguments: [
           {
             name: 'spec-id',
@@ -120,6 +140,7 @@ export const manifest: CommandDefinition[] = [
       {
         name: 'list',
         description: 'List all specifications and their associated intents',
+        action: specListAction,
         options: [
           {
             name: 'from-intent',
@@ -135,6 +156,7 @@ export const manifest: CommandDefinition[] = [
       {
         name: 'delete',
         description: 'Delete a specification and its artifacts',
+        action: specDeleteAction,
         arguments: [
           {
             name: 'spec-id',
@@ -146,6 +168,7 @@ export const manifest: CommandDefinition[] = [
       {
         name: 'archive',
         description: 'Archive a specification',
+        action: specArchiveAction,
         arguments: [
           {
             name: 'spec-id',
@@ -157,6 +180,7 @@ export const manifest: CommandDefinition[] = [
       {
         name: 'apply',
         description: 'Implement a specification',
+        action: specApplyAction,
         arguments: [
           {
             name: 'spec-id',
@@ -203,6 +227,7 @@ export const manifest: CommandDefinition[] = [
       {
         name: 'generate-slash-commands',
         description: 'Generate slash command definitions for IDE integration',
+        action: generateSlashCommandsAction,
         arguments: [
           {
             name: 'tool',

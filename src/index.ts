@@ -3,19 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { Command } from 'commander';
-import { manifest } from './manifest.js';
-import { initCommand } from './commands/init.js';
-import { intentCreateAction } from './commands/intent/create.js';
-import { intentListAction } from './commands/intent/list.js';
-import { intentValidateAction } from './commands/intent/validate.js';
-import { generateSlashCommandsAction } from './commands/integration/generate.js';
-
-import { specDeriveAction } from './commands/spec/derive.js';
-import { specDeleteAction } from './commands/spec/delete.js';
-import { specApplyAction } from './commands/spec/apply.js';
-import { specArchiveAction } from './commands/spec/archive.js';
-import { specListAction } from './commands/spec/list.js';
-import { specValidateAction } from './commands/spec/validate.js';
+import { manifest, CommandDefinition } from './manifest.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const packageJsonPath = path.resolve(__dirname, '../package.json');
@@ -28,90 +16,51 @@ program
     .description('Praxis: Intent-First Development Framework')
     .version(packageJson.version);
 
-// Dynamically build commands from manifest
-manifest.forEach((cmdDef) => {
-    const cmd = program.command(cmdDef.name).description(cmdDef.description);
+/**
+ * Registers a command and its subcommands recursively from a definition.
+ */
+function registerCommand(parent: Command, def: CommandDefinition) {
+    const cmd = parent.command(def.name).description(def.description);
 
-    if (cmdDef.subcommands) {
-        cmdDef.subcommands.forEach((subCmdDef) => {
-            const subCmd = cmd.command(subCmdDef.name).description(subCmdDef.description);
-
-            if (subCmdDef.arguments) {
-                subCmdDef.arguments.forEach(arg => {
-                    const argStr = arg.required ? `<${arg.name}>` : `[${arg.name}]`;
-                    subCmd.argument(argStr, arg.description);
-                });
-            }
-
-            if (subCmdDef.options) {
-                subCmdDef.options.forEach(opt => {
-                    const flag = opt.required ? `<${opt.name}>` : `[${opt.name}]`;
-                    subCmd.option(opt.alias ? `-${opt.alias}, --${opt.name} ${flag}` : `--${opt.name} ${flag}`, opt.description);
-                });
-            }
-
-            subCmd.action(async (...args: any[]) => {
-                if (cmdDef.name === 'intent' && subCmdDef.name === 'create') {
-                    const [description] = args;
-                    await intentCreateAction(description);
-                } else if (cmdDef.name === 'intent' && subCmdDef.name === 'list') {
-                    await intentListAction();
-                } else if (cmdDef.name === 'intent' && subCmdDef.name === 'validate') {
-                    const [intentId] = args;
-                    await intentValidateAction(intentId);
-                } else if (cmdDef.name === 'integration' && subCmdDef.name === 'generate-slash-commands') {
-                    const [tool] = args;
-                    await generateSlashCommandsAction(tool);
-                } else if (cmdDef.name === 'spec' && subCmdDef.name === 'derive') {
-                    const [options] = args;
-                    await specDeriveAction(options);
-                } else if (cmdDef.name === 'spec' && subCmdDef.name === 'delete') {
-                    const [specId] = args;
-                    await specDeleteAction(specId);
-                } else if (cmdDef.name === 'spec' && subCmdDef.name === 'apply') {
-                    const [specId] = args;
-                    await specApplyAction(specId);
-                } else if (cmdDef.name === 'spec' && subCmdDef.name === 'archive') {
-                    const [specId] = args;
-                    await specArchiveAction(specId);
-                } else if (cmdDef.name === 'spec' && subCmdDef.name === 'list') {
-                    const [options] = args;
-                    await specListAction(options);
-                } else if (cmdDef.name === 'spec' && subCmdDef.name === 'validate') {
-                    const [specId] = args;
-                    await specValidateAction(specId);
-                } else {
-                    console.log(`Executing ${cmdDef.name} ${subCmdDef.name}...`);
-                    // Implementation will go here
-                }
-            });
-        });
-    } else {
-        // Top-level command with no subcommands
-        if (cmdDef.arguments) {
-            cmdDef.arguments.forEach(arg => {
-                const argStr = arg.required ? `<${arg.name}>` : `[${arg.name}]`;
-                cmd.argument(argStr, arg.description);
-            });
-        }
-
-        if (cmdDef.options) {
-            cmdDef.options.forEach(opt => {
-                const flag = opt.required ? `<${opt.name}>` : `[${opt.name}]`;
-                cmd.option(opt.alias ? `-${opt.alias}, --${opt.name} ${flag}` : `--${opt.name} ${flag}`, opt.description);
-            });
-        }
-
-        cmd.action(async (...args: any[]) => {
-            if (cmdDef.name === 'init') {
-                const [projectName] = args;
-                await initCommand(projectName);
-            } else {
-                console.log(`Executing ${cmdDef.name}...`);
-                // Implementation will go here
-            }
+    // Register arguments
+    if (def.arguments) {
+        def.arguments.forEach(arg => {
+            const argStr = arg.required ? `<${arg.name}>` : `[${arg.name}]`;
+            cmd.argument(argStr, arg.description);
         });
     }
-});
+
+    // Register options
+    if (def.options) {
+        def.options.forEach(opt => {
+            const flag = opt.required ? `<${opt.name}>` : `[${opt.name}]`;
+            cmd.option(opt.alias ? `-${opt.alias}, --${opt.name} ${flag}` : `--${opt.name} ${flag}`, opt.description);
+        });
+    }
+
+    // Register subcommands
+    if (def.subcommands) {
+        def.subcommands.forEach(subDef => registerCommand(cmd, subDef));
+    }
+
+    // Register action
+    if (def.action) {
+        cmd.action(async (...args: any[]) => {
+            try {
+                await def.action!(...args);
+            } catch (error) {
+                console.error(`Error executing command '${def.name}':`, error instanceof Error ? error.message : error);
+                process.exit(1);
+            }
+        });
+    } else if (!def.subcommands) {
+        cmd.action(() => {
+            console.log(`Command '${def.name}' is not yet implemented.`);
+        });
+    }
+}
+
+// Dynamically build commands from manifest
+manifest.forEach(cmdDef => registerCommand(program, cmdDef));
 
 program.parse();

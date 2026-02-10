@@ -1,5 +1,10 @@
 import fs from 'fs';
 import path from 'path';
+import {
+    findIntentFile,
+    INTENTS_DIR,
+    TEMPLATES_DIR
+} from '../../core/utils.js';
 
 /**
  * Action for 'praxis spec derive --from <intent-id>'
@@ -7,8 +12,8 @@ import path from 'path';
 export async function specDeriveAction(options: { fromIntent: string }) {
     const intentId = options.fromIntent;
     const rootDir = process.cwd();
-    const intentsDir = path.join(rootDir, '.praxis', 'intents');
-    const templatePath = path.join(rootDir, '.praxis', 'templates', 'spec-template.md');
+    const intentsDir = path.join(rootDir, INTENTS_DIR);
+    const templatePath = path.join(rootDir, TEMPLATES_DIR, 'spec-template.md');
 
     // 1. Validate environment
     if (!fs.existsSync(intentsDir)) {
@@ -21,7 +26,7 @@ export async function specDeriveAction(options: { fromIntent: string }) {
     }
 
     // 2. Find intent file
-    const intentFile = findIntentFile(intentsDir, intentId);
+    const intentFile = findIntentFile(intentId);
     if (!intentFile) {
         console.error(`Error: Intent with ID '${intentId}' not found.`);
         return;
@@ -40,41 +45,6 @@ export async function specDeriveAction(options: { fromIntent: string }) {
     console.log('--------------------------');
     console.log(prompt);
     console.log('--------------------------\n');
-}
-
-function findIntentFile(dir: string, targetId: string): string | null {
-    try {
-        const list = fs.readdirSync(dir);
-
-        // Check if direct match exists (optimization)
-        const directPath = path.join(dir, targetId, 'intent.md');
-        if (fs.existsSync(directPath)) {
-            return directPath;
-        }
-
-        // Recursive search
-        for (const file of list) {
-            const filePath = path.join(dir, file);
-            const stat = fs.statSync(filePath);
-
-            if (stat.isDirectory()) {
-                // If the directory name *is* the ID, check for intent.md inside
-                if (file === targetId) {
-                    const potentialIntent = path.join(filePath, 'intent.md');
-                    if (fs.existsSync(potentialIntent)) {
-                        return potentialIntent;
-                    }
-                }
-
-                // Otherwise recurse
-                const found = findIntentFile(filePath, targetId);
-                if (found) return found;
-            }
-        }
-    } catch (e) {
-        // Ignore permission errors etc during search
-    }
-    return null;
 }
 
 function generateAiPrompt(intentId: string, intentContent: string, templateContent: string): string {
