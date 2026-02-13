@@ -1,6 +1,6 @@
 # Praxis: Agent Instructions
 
-This document provides technical context, build steps, and conventions for AI coding agents. For a high-level project overview and user-facing documentation, see [README.md](file:///p:/Praxis/README.md).
+This document provides technical context, build steps, and conventions for AI coding agents. For a high-level project overview and user-facing documentation, see [README.md](README.md).
 
 ## Technical Overview
 Praxis is a TypeScript-based CLI tool that bridges Intent-Driven Development (IDD) and Spec-Driven Development (SDD).
@@ -32,12 +32,12 @@ npm run coverage
 
 ## Project Structure
 
-- `p:/Praxis/src/index.ts`: The main entry point. It dynamically registers commands from the manifest.
-- `p:/Praxis/src/manifest.ts`: Central definition of all commands, subcommands, and their actions.
-- `p:/Praxis/src/commands/`: Implementation of CLI command actions.
-- `p:/Praxis/src/core/`: Core logic and shared utilities.
-  - `p:/Praxis/src/core/utils.ts`: Centralized path constants and file system helpers.
-  - `p:/Praxis/src/core/command-generation/`: Logic for generating tool-specific slash commands.
+- `src/index.ts`: The main entry point. It dynamically registers commands from the manifest.
+- `src/manifest.ts`: Central definition of all commands, subcommands, and their actions.
+- `src/commands/`: Implementation of CLI command actions.
+- `src/core/`: Core logic and shared utilities.
+  - `src/core/utils.ts`: Centralized path constants and file system helpers.
+  - `src/core/command-generation/`: Logic for generating tool-specific slash commands.
 
 ## Architecture & Conventions
 
