@@ -18,7 +18,11 @@ describe('Task Persistence', () => {
 
         queueTask('test-task', { foo: 'bar' });
 
-        expect(fs.writeFileSync).toHaveBeenCalled();
+        expect(fs.writeFileSync).toHaveBeenCalledWith(
+            expect.stringContaining('tasks.json'),
+            expect.stringContaining('"type": "test-task"'),
+            'utf-8'
+        );
     });
 
     it('should load tasks correctly', () => {
