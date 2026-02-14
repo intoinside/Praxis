@@ -1,8 +1,21 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import fs from 'fs';
+import inquirer from 'inquirer';
 import { initCommand } from './init.js';
 
 vi.mock('fs');
+vi.mock('inquirer');
+vi.mock('../core/agent/config.js', () => ({
+    saveConfig: vi.fn(),
+    DEFAULT_CONFIG: {
+        agent: {
+            enabled: true,
+            services: { mcp: true, taskPolling: true },
+            tasks: {},
+            pollIntervalMs: 3000
+        }
+    }
+}));
 
 describe('initCommand', () => {
     const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => { });
@@ -10,6 +23,11 @@ describe('initCommand', () => {
     beforeEach(() => {
         vi.clearAllMocks();
         vi.mocked(fs.existsSync).mockReturnValue(false);
+        vi.mocked(inquirer.prompt).mockResolvedValue({
+            enableAgent: true,
+            enableMcp: true,
+            enablePolling: true
+        });
     });
 
     it('should create all required directories and copy templates', async () => {

@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import { queueTask } from '../../core/agent/persistence.js';
 
 /**
  * Action for 'praxis spec archive <spec-id>'
@@ -70,6 +71,10 @@ export async function specArchiveAction(specId: string) {
             fs.renameSync(specDir, targetDir);
             console.log(`Successfully archived spec '${specId}'.`);
         }
+
+        // Trigger background documentation update
+        queueTask('documentation-update', { specId });
+
     } catch (error) {
         if (error instanceof Error) {
             console.error(`Error archiving spec '${specId}': ${error.message}`);
