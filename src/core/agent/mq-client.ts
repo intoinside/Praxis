@@ -24,7 +24,7 @@ export class MQClient {
         return new Promise((resolve, reject) => {
             server.listen(port, () => {
                 console.error(`MQTT Broker started on port ${port}`);
-                this.broker = { aedes, server };
+                this.broker = { aedes: aedesInstance, server };
                 resolve();
             });
 
