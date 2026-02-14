@@ -41,7 +41,15 @@ export function loadConfig(): PraxisConfig {
     }
     try {
         const fileContent = fs.readFileSync(configPath, 'utf8');
-        return { ...DEFAULT_CONFIG, ...JSON.parse(fileContent) };
+        const fileConfig = JSON.parse(fileContent);
+        return {
+            ...DEFAULT_CONFIG,
+            ...fileConfig,
+            agent: {
+                ...DEFAULT_CONFIG.agent,
+                ...(fileConfig.agent || {})
+            }
+        };
     } catch (e) {
         return DEFAULT_CONFIG;
     }
