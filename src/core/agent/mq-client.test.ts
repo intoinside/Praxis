@@ -17,14 +17,16 @@ vi.mock('mqtt', () => ({
 }));
 
 vi.mock('aedes', () => {
-    const aedesMock = vi.fn().mockReturnValue({
+    const aedesInstance = {
         handle: vi.fn(),
         close: vi.fn((cb) => cb && cb())
-    });
-    return {
-        default: aedesMock,
-        __esModule: true
     };
+    const aedesMock = {
+        createBroker: vi.fn().mockResolvedValue(aedesInstance),
+        default: null // Will be handled by the return object
+    };
+    (aedesMock as any).default = aedesMock;
+    return aedesMock;
 });
 
 vi.mock('net', () => ({

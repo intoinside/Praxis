@@ -16,9 +16,9 @@ export class MQClient {
     private broker: any = null;
 
     async startInternalBroker(port: number = 1883): Promise<void> {
-        // Handle various import styles (ESM/CJS)
-        const aedesFactory = (aedes as any).default || aedes;
-        const aedesInstance = aedesFactory();
+        // Handle Aedes v1.x async creation
+        const aedesModule = (aedes as any).default || aedes;
+        const aedesInstance = await aedesModule.createBroker();
         const server = net.createServer(aedesInstance.handle);
 
         return new Promise((resolve, reject) => {

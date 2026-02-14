@@ -212,6 +212,37 @@ export const manifest: CommandDefinition[] = [
     ]
   },
   {
+    name: 'serve',
+    description: 'Expose Praxis commands through a local service',
+    action: integrationServeAction,
+    options: [
+      {
+        name: 'no-mcp',
+        description: 'Disable MCP server',
+      },
+      {
+        name: 'no-polling',
+        description: 'Disable background task polling',
+      },
+      {
+        name: 'poll-interval',
+        description: 'Interval in milliseconds for task polling',
+      },
+      {
+        name: 'mq-mode',
+        description: 'Use MQTT for task distribution',
+      },
+      {
+        name: 'broker-host',
+        description: 'MQTT broker host',
+      },
+      {
+        name: 'broker-port',
+        description: 'MQTT broker port',
+      }
+    ]
+  },
+  {
     name: 'analyze',
     description: 'Analyze impact and drift',
     subcommands: [
@@ -236,37 +267,6 @@ export const manifest: CommandDefinition[] = [
     name: 'integration',
     description: 'IDE and AI integration',
     subcommands: [
-      {
-        name: 'serve',
-        description: 'Expose Praxis commands through a local service',
-        action: integrationServeAction,
-        options: [
-          {
-            name: 'no-mcp',
-            description: 'Disable MCP server',
-          },
-          {
-            name: 'no-polling',
-            description: 'Disable background task polling',
-          },
-          {
-            name: 'poll-interval',
-            description: 'Interval in milliseconds for task polling',
-          },
-          {
-            name: 'mq-mode',
-            description: 'Use MQTT for task distribution',
-          },
-          {
-            name: 'broker-host',
-            description: 'MQTT broker host',
-          },
-          {
-            name: 'broker-port',
-            description: 'MQTT broker port',
-          }
-        ]
-      },
       {
         name: 'commands',
         description: 'List all available commands in machine-readable form',
