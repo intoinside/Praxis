@@ -1,6 +1,6 @@
 {
   "name": "@intoinside/praxis",
-  "version": "1.2.0",
+  "version": "1.3.0-alpha",
   "description": "**Praxis** is an intent-first development framework that bridges **Intent‑Driven Development (IDD)** and **Spec‑Driven Development (SDD)** into a single, coherent workflow.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
