@@ -73,7 +73,7 @@ export async function specArchiveAction(specId: string) {
         }
 
         // Trigger background documentation update
-        queueTask('documentation-update', { specId });
+        await queueTask('documentation-update', { specId });
 
     } catch (error) {
         if (error instanceof Error) {

@@ -10,6 +10,7 @@ import { specArchiveAction } from './commands/spec/archive.js';
 import { specListAction } from './commands/spec/list.js';
 import { specValidateAction } from './commands/spec/validate.js';
 import { integrationServeAction } from './commands/integration/serve.js';
+import { agentBrokerAction } from './commands/agent/broker.js';
 
 /**
  * Praxis Command Manifest
@@ -193,6 +194,24 @@ export const manifest: CommandDefinition[] = [
     ],
   },
   {
+    name: 'agent',
+    description: 'Manage background agents and the messaging broker',
+    subcommands: [
+      {
+        name: 'broker',
+        description: 'Start an embedded MQTT broker for distributed task management',
+        action: agentBrokerAction,
+        options: [
+          {
+            name: 'port',
+            description: 'The port to listen on (default: 1883)',
+            alias: 'p'
+          }
+        ]
+      }
+    ]
+  },
+  {
     name: 'analyze',
     description: 'Analyze impact and drift',
     subcommands: [
@@ -233,6 +252,18 @@ export const manifest: CommandDefinition[] = [
           {
             name: 'poll-interval',
             description: 'Interval in milliseconds for task polling',
+          },
+          {
+            name: 'mq-mode',
+            description: 'Use MQTT for task distribution',
+          },
+          {
+            name: 'broker-host',
+            description: 'MQTT broker host',
+          },
+          {
+            name: 'broker-port',
+            description: 'MQTT broker port',
           }
         ]
       },

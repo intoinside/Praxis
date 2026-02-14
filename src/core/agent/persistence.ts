@@ -1,6 +1,8 @@
 import fs from 'fs';
 import path from 'path';
 import { PRAXIS_DIR } from '../utils.js';
+import { mqClient } from './mq-client.js';
+import { loadConfig } from './config.js';
 
 const AGENT_DIR = path.join(PRAXIS_DIR, 'agent');
 const TASKS_FILE = path.join(AGENT_DIR, 'tasks.json');
@@ -33,17 +35,33 @@ export function loadTasks(): TaskRecord[] {
     }
 }
 
-export function queueTask(type: string, payload?: any) {
+export async function queueTask(type: string, payload?: any) {
+    const config = loadConfig();
     const tasks = loadTasks();
     const id = `${type}-${Date.now()}`;
-    tasks.push({
+    const task: TaskRecord = {
         id,
         type,
         payload,
         status: 'pending',
         createdAt: new Date().toISOString()
-    });
+    };
+
+    tasks.push(task);
     saveTasks(tasks);
-    console.log(`Task queued: ${id}`);
+    console.log(`Task queued locally: ${id}`);
+
+    if (config.agent.mode === 'mqtt' && config.agent.mqtt) {
+        try {
+            await mqClient.connect(config.agent.mqtt);
+            await mqClient.publishTask(task);
+            await mqClient.disconnect();
+            console.log(`Task published to MQTT: ${id}`);
+        } catch (e) {
+            console.error(`Failed to publish task to MQTT: ${e instanceof Error ? e.message : String(e)}`);
+            console.error('Task will remain in local queue for fallback processing.');
+        }
+    }
+
     return id;
 }

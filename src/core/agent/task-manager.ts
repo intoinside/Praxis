@@ -2,6 +2,7 @@ import { BackgroundTask } from './tasks/base.js';
 import { loadTasks, saveTasks } from './persistence.js';
 import { DocumentationUpdateTask } from './tasks/documentation-update.js';
 import { DriftDetectionTask } from './tasks/drift-detection.js';
+import { mqClient, TaskMessage } from './mq-client.js';
 
 export class TaskManager {
     private tasks: Map<string, BackgroundTask> = new Map();
@@ -37,11 +38,14 @@ export class TaskManager {
     private async runTask(task: BackgroundTask) {
         this.activeCount++;
         this.updatePersistentTaskStatus(task.id, 'running');
+        mqClient.publishStatus(task.id, 'running').catch(() => { });
         try {
             await task.run();
             this.updatePersistentTaskStatus(task.id, 'completed');
+            mqClient.publishStatus(task.id, 'completed').catch(() => { });
         } catch (e) {
             this.updatePersistentTaskStatus(task.id, 'failed');
+            mqClient.publishStatus(task.id, 'failed', { error: e instanceof Error ? e.message : String(e) }).catch(() => { });
         } finally {
             this.activeCount--;
             this.schedule();
@@ -55,6 +59,24 @@ export class TaskManager {
             t.status = status;
             saveTasks(tasks);
         }
+    }
+
+    public startMqListener(useShared: boolean = true) {
+        mqClient.subscribeToTasks((msg: TaskMessage) => {
+            if (!this.tasks.has(msg.id)) {
+                let task: BackgroundTask | null = null;
+                if (msg.type === 'documentation-update') {
+                    task = new DocumentationUpdateTask(msg.id);
+                } else if (msg.type === 'drift-detection') {
+                    task = new DriftDetectionTask(msg.id);
+                }
+
+                if (task) {
+                    this.addTask(task);
+                    console.error(`Acquired task via MQTT: ${msg.id}`);
+                }
+            }
+        }, useShared);
     }
 
     public startPolling(intervalMs: number = 3000) {

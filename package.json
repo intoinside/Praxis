@@ -15,8 +15,10 @@
   ],
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.26.0",
+    "aedes": "^1.0.0",
     "commander": "^14.0.2",
-    "inquirer": "^13.2.2"
+    "inquirer": "^13.2.2",
+    "mqtt": "^5.15.0"
   },
   "scripts": {
     "build": "tsc",
