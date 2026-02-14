@@ -214,30 +214,65 @@ List is a wip and may change in future.
 |Command|Description|Status/Version|
 |-|-|-|
 |`praxis serve`|Expose Praxis commands through a local service for IDE or AI integration.|✅|
+|`praxis agent broker`|Start an embedded MQTT broker for distributed task management.|✅|
 |`praxis commands`|List all available commands in machine‑readable form.|❔​|
 
 ---
 
-## Background Agent & MCP
+## Background Agent & Distributed Architecture
 
-Praxis includes a standalone background agent (daemon) that can execute long-running tasks asynchronously while you continue coding. This agent communicates using the **Model Context Protocol (MCP)**.
+Praxis includes a standalone background agent (daemon) that can execute long-running tasks asynchronously. It supports two modes of operation:
+
+1.  **Local Mode (File-based)**: Simple setup for a single machine using standard file watch polling.
+2.  **Distributed Mode (MQTT)**: Scalable architecture for multiple parallel agents using an MQTT message queue.
 
 ### Starting the Agent
 
-To start the background agent, run the following command in your terminal:
+To start the background agent, run:
 
 ```bash
 praxis serve
 ```
 
-The agent will start an MCP server on `stdio`. This process must remain running to handle background requests.
+By default, this starts the agent in the mode defined in your `.praxisrc.json`.
+
+### Distributed Mode & Embedded Broker
+
+In distributed mode, agents connect to an MQTT host to receive tasks via **MQTT 5 Shared Subscriptions** (competing consumers). This allows horizontal scaling where multiple agents can share the workload.
+
+Praxis includes an **embedded MQTT broker** for easy development:
+
+```bash
+praxis agent broker --port 1883
+```
+
+You can configure the agent to **auto-start** the internal broker when `praxis serve` is called by setting `autoStart: true` in your configuration.
+
+### Configuration (`.praxisrc.json`)
+
+The agent behavior is controlled via a central configuration file. Use `praxis init` to configure it interactively.
+
+```json
+{
+  "agent": {
+    "enabled": true,
+    "mode": "mqtt",
+    "mqtt": {
+      "type": "internal",
+      "host": "localhost",
+      "port": 1883,
+      "autoStart": true
+    }
+  }
+}
+```
 
 ### IDE Integration (MCP)
 
-Since Praxis uses MCP, you can connect it directly to compatible AI IDEs or tools (like Claude Desktop, Cursor, or Isaac). This allows the AI agent in your IDE to:
+The agent communicates using the **Model Context Protocol (MCP)** when running via `praxis serve`. This allows any MCP-compatible AI (Claude Desktop, Cursor, Isaac) to:
 - List active background tasks.
 - Start long-running operations (like drift analysis).
-- Subcribe to progress updates.
+- Subscribe to progress updates.
 
 #### Available MCP Tools
 
