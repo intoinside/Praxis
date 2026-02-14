@@ -213,8 +213,39 @@ List is a wip and may change in future.
 
 |Command|Description|Status/Version|
 |-|-|-|
-|`praxis serve`|Expose Praxis commands through a local service for IDE or AI integration.|❔​|
+|`praxis serve`|Expose Praxis commands through a local service for IDE or AI integration.|✅|
 |`praxis commands`|List all available commands in machine‑readable form.|❔​|
+
+---
+
+## Background Agent & MCP
+
+Praxis includes a standalone background agent (daemon) that can execute long-running tasks asynchronously while you continue coding. This agent communicates using the **Model Context Protocol (MCP)**.
+
+### Starting the Agent
+
+To start the background agent, run the following command in your terminal:
+
+```bash
+praxis serve
+```
+
+The agent will start an MCP server on `stdio`. This process must remain running to handle background requests.
+
+### IDE Integration (MCP)
+
+Since Praxis uses MCP, you can connect it directly to compatible AI IDEs or tools (like Claude Desktop, Cursor, or Isaac). This allows the AI agent in your IDE to:
+- List active background tasks.
+- Start long-running operations (like drift analysis).
+- Subcribe to progress updates.
+
+#### Available MCP Tools
+
+| Tool | Description | Parameters |
+|------|-------------|------------|
+| `list_tasks` | List all current background tasks and their status. | None |
+| `start_drift_detection` | Triggers a background drift analysis. | `id` (required): Unique task identifier. |
+| `get_task_status` | Retrieves progress and status of a specific task. | `id` (required): Task identifier. |
 
 ---
 

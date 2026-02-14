@@ -14,7 +14,9 @@
     "LICENSE"
   ],
   "dependencies": {
-    "commander": "^14.0.2"
+    "@modelcontextprotocol/sdk": "^1.26.0",
+    "commander": "^14.0.2",
+    "inquirer": "^13.2.2"
   },
   "scripts": {
     "build": "tsc",

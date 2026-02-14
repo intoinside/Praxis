@@ -9,6 +9,7 @@ import { specApplyAction } from './commands/spec/apply.js';
 import { specArchiveAction } from './commands/spec/archive.js';
 import { specListAction } from './commands/spec/list.js';
 import { specValidateAction } from './commands/spec/validate.js';
+import { integrationServeAction } from './commands/integration/serve.js';
 
 /**
  * Praxis Command Manifest
@@ -219,6 +220,21 @@ export const manifest: CommandDefinition[] = [
       {
         name: 'serve',
         description: 'Expose Praxis commands through a local service',
+        action: integrationServeAction,
+        options: [
+          {
+            name: 'no-mcp',
+            description: 'Disable MCP server',
+          },
+          {
+            name: 'no-polling',
+            description: 'Disable background task polling',
+          },
+          {
+            name: 'poll-interval',
+            description: 'Interval in milliseconds for task polling',
+          }
+        ]
       },
       {
         name: 'commands',
