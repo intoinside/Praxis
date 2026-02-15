@@ -2,15 +2,21 @@ import { BackgroundTask } from './tasks/base.js';
 import { loadTasks, saveTasks } from './persistence.js';
 import { DocumentationUpdateTask } from './tasks/documentation-update.js';
 import { DriftDetectionTask } from './tasks/drift-detection.js';
+import { PingTask } from './tasks/ping.js';
 import { mqClient, TaskMessage } from './mq-client.js';
+import { loadConfig } from './config.js';
 
 export class TaskManager {
     private tasks: Map<string, BackgroundTask> = new Map();
     private activeCount: number = 0;
     private maxConcurrency: number = 1; // Default to 1 to avoid conflicts
 
-    constructor(maxConcurrency: number = 1) {
-        this.maxConcurrency = maxConcurrency;
+    constructor() {
+        // Concurrency is now managed via config
+    }
+
+    private getConcurrency(): number {
+        return loadConfig().agent.concurrency || 1;
     }
 
     addTask(task: BackgroundTask) {
@@ -27,7 +33,7 @@ export class TaskManager {
     }
 
     private schedule() {
-        if (this.activeCount >= this.maxConcurrency) return;
+        if (this.activeCount >= this.getConcurrency()) return;
 
         const pendingTask = this.getAllTasks().find(t => t.status === 'pending');
         if (pendingTask) {
@@ -37,6 +43,7 @@ export class TaskManager {
 
     private async runTask(task: BackgroundTask) {
         this.activeCount++;
+        console.error(`[Agent] Processing task: ${task.constructor.name} (ID: ${task.id})`);
         this.updatePersistentTaskStatus(task.id, 'running');
         mqClient.publishStatus(task.id, 'running').catch(() => { });
         try {
@@ -69,6 +76,8 @@ export class TaskManager {
                     task = new DocumentationUpdateTask(msg.id);
                 } else if (msg.type === 'drift-detection') {
                     task = new DriftDetectionTask(msg.id);
+                } else if (msg.type === 'ping') {
+                    task = new PingTask(msg.id);
                 }
 
                 if (task) {
@@ -77,29 +86,6 @@ export class TaskManager {
                 }
             }
         }, useShared);
-    }
-
-    public startPolling(intervalMs: number = 3000) {
-        setInterval(() => {
-            const persistentTasks = loadTasks();
-            const pending = persistentTasks.filter(t => t.status === 'pending');
-
-            for (const p of pending) {
-                if (!this.tasks.has(p.id)) {
-                    // Instantiate the correct task type
-                    let task: BackgroundTask | null = null;
-                    if (p.type === 'documentation-update') {
-                        task = new DocumentationUpdateTask(p.id);
-                    } else if (p.type === 'drift-detection') {
-                        task = new DriftDetectionTask(p.id);
-                    }
-
-                    if (task) {
-                        this.addTask(task);
-                    }
-                }
-            }
-        }, intervalMs);
     }
 }
 

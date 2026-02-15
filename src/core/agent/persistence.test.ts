@@ -10,7 +10,7 @@ vi.mock('../utils.js', () => ({
 
 vi.mock('./config.js', () => ({
     loadConfig: vi.fn().mockReturnValue({
-        agent: { mode: 'file' }
+        agent: { enabled: true, broker: 'internal', brokerUrl: 'mqtt://localhost:1883' }
     })
 }));
 
@@ -18,6 +18,7 @@ vi.mock('./mq-client.js', () => ({
     mqClient: {
         connect: vi.fn(),
         publishTask: vi.fn(),
+        publishStatus: vi.fn(),
         disconnect: vi.fn()
     }
 }));
@@ -58,24 +59,14 @@ describe('Task Persistence', () => {
         expect(tasks).toEqual([]);
     });
 
-    it('should publish to MQTT when mode is mqtt', async () => {
-        const { loadConfig } = await import('./config.js');
-        vi.mocked(loadConfig).mockReturnValue({
-            agent: {
-                mode: 'mqtt',
-                mqtt: { host: 'localhost', port: 1883 }
-            }
-        } as any);
-
+    it('should publish to MQTT when agent is enabled', async () => {
         vi.mocked(fs.existsSync).mockReturnValue(false);
         vi.mocked(fs.readFileSync).mockReturnValue('[]');
 
         await queueTask('mq-task', { test: true });
 
-        expect(mqClient.connect).toHaveBeenCalled();
         expect(mqClient.publishTask).toHaveBeenCalledWith(expect.objectContaining({
             type: 'mq-task'
         }));
-        expect(mqClient.disconnect).toHaveBeenCalled();
     });
 });

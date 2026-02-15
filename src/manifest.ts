@@ -11,6 +11,8 @@ import { specListAction } from './commands/spec/list.js';
 import { specValidateAction } from './commands/spec/validate.js';
 import { integrationServeAction } from './commands/integration/serve.js';
 import { agentBrokerAction } from './commands/agent/broker.js';
+import { agentRunAction } from './commands/agent/run.js';
+import { agentPingAction } from './commands/agent/ping.js';
 
 /**
  * Praxis Command Manifest
@@ -208,6 +210,16 @@ export const manifest: CommandDefinition[] = [
             alias: 'p'
           }
         ]
+      },
+      {
+        name: 'run',
+        description: 'Start an agent worker to process tasks from the MQTT broker',
+        action: agentRunAction
+      },
+      {
+        name: 'ping',
+        description: 'Send a PING task to the agent queue',
+        action: agentPingAction
       }
     ]
   },
@@ -219,26 +231,6 @@ export const manifest: CommandDefinition[] = [
       {
         name: 'no-mcp',
         description: 'Disable MCP server',
-      },
-      {
-        name: 'no-polling',
-        description: 'Disable background task polling',
-      },
-      {
-        name: 'poll-interval',
-        description: 'Interval in milliseconds for task polling',
-      },
-      {
-        name: 'mq-mode',
-        description: 'Use MQTT for task distribution',
-      },
-      {
-        name: 'broker-host',
-        description: 'MQTT broker host',
-      },
-      {
-        name: 'broker-port',
-        description: 'MQTT broker port',
       }
     ]
   },

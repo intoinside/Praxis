@@ -1,5 +1,6 @@
 import mqtt, { MqttClient } from 'mqtt';
-import * as aedes from 'aedes';
+// @ts-ignore
+import { Aedes } from 'aedes';
 import net from 'net';
 import { MqttConfig } from './config.js';
 
@@ -17,8 +18,7 @@ export class MQClient {
 
     async startInternalBroker(port: number = 1883): Promise<void> {
         // Handle Aedes v1.x async creation
-        const aedesModule = (aedes as any).default || aedes;
-        const aedesInstance = await aedesModule.createBroker();
+        const aedesInstance = await (Aedes as any).createBroker();
         const server = net.createServer(aedesInstance.handle);
 
         return new Promise((resolve, reject) => {
@@ -35,18 +35,16 @@ export class MQClient {
         });
     }
 
-    async connect(config: MqttConfig): Promise<void> {
-        const url = `mqtt://${config.host}:${config.port}`;
-
+    async connect(brokerUrl: string, clientId?: string): Promise<void> {
         return new Promise((resolve, reject) => {
-            this.client = mqtt.connect(url, {
-                protocolVersion: 5,
-                clientId: config.clientId || `praxis-agent-${Math.random().toString(16).slice(2)}`,
+            this.client = mqtt.connect(brokerUrl, {
+                protocolVersion: 4,
+                clientId: clientId || `praxis-agent-${Math.random().toString(16).slice(2)}`,
                 clean: true
             });
 
             this.client.on('connect', () => {
-                console.error(`Connected to MQTT broker at ${url}`);
+                console.error(`Connected to MQTT broker at ${brokerUrl}`);
                 resolve();
             });
 
@@ -67,7 +65,8 @@ export class MQClient {
         this.client.subscribe(topic, { qos: 1 });
 
         this.client.on('message', (t, message) => {
-            if (t === topic || t === 'praxis/tasks/request') {
+            console.error(`MQTT message received on topic: ${t}`);
+            if (t === 'praxis/tasks/request' || t === topic) {
                 try {
                     const task = JSON.parse(message.toString()) as TaskMessage;
                     callback(task);
@@ -78,16 +77,35 @@ export class MQClient {
         });
     }
 
-    async publishTask(task: TaskMessage) {
-        if (!this.client) throw new Error('MQTT Client not connected');
+    async publishTask(task: TaskMessage): Promise<void> {
+        const { ensureBrokerRunning, ensureAgentRunning } = await import('./lifecycle.js');
+        await ensureBrokerRunning();
+        await ensureAgentRunning();
+
+        if (!this.client) {
+            const { loadConfig } = await import('./config.js');
+            const config = loadConfig();
+            await this.connect(config.agent.brokerUrl);
+        }
+
         const topic = 'praxis/tasks/request';
-        this.client.publish(topic, JSON.stringify(task), { qos: 1, retain: true });
+        return new Promise((resolve, reject) => {
+            this.client!.publish(topic, JSON.stringify(task), { qos: 1, retain: true }, (err) => {
+                if (err) reject(err);
+                else resolve();
+            });
+        });
     }
 
-    async publishStatus(taskId: string, status: string, payload?: any) {
+    async publishStatus(taskId: string, status: string, payload?: any): Promise<void> {
         if (!this.client) throw new Error('MQTT Client not connected');
         const topic = `praxis/tasks/status/${taskId}`;
-        this.client.publish(topic, JSON.stringify({ taskId, status, payload, updatedAt: new Date().toISOString() }), { qos: 1, retain: true });
+        return new Promise((resolve, reject) => {
+            this.client!.publish(topic, JSON.stringify({ taskId, status, payload, updatedAt: new Date().toISOString() }), { qos: 1, retain: true }, (err) => {
+                if (err) reject(err);
+                else resolve();
+            });
+        });
     }
 
     async disconnect() {

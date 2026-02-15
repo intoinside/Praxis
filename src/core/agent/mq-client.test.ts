@@ -21,12 +21,11 @@ vi.mock('aedes', () => {
         handle: vi.fn(),
         close: vi.fn((cb) => cb && cb())
     };
-    const aedesMock = {
-        createBroker: vi.fn().mockResolvedValue(aedesInstance),
-        default: null // Will be handled by the return object
+    return {
+        Aedes: {
+            createBroker: vi.fn().mockResolvedValue(aedesInstance)
+        }
     };
-    (aedesMock as any).default = aedesMock;
-    return aedesMock;
 });
 
 vi.mock('net', () => ({
@@ -57,14 +56,14 @@ describe('MQClient', () => {
     });
 
     it('should connect to a broker', async () => {
-        const config = { type: 'internal' as const, host: 'localhost', port: 1883 };
-        await client.connect(config);
+        const brokerUrl = 'mqtt://localhost:1883';
+        await client.connect(brokerUrl);
         // Expectation on mqtt.connect can be added if we import mqtt as well
     });
 
     it('should publish status', async () => {
-        const config = { type: 'internal' as const, host: 'localhost', port: 1883 };
-        await client.connect(config);
+        const brokerUrl = 'mqtt://localhost:1883';
+        await client.connect(brokerUrl);
         await client.publishStatus('taskId', 'running');
         // Check if publish was called (requires mocking mqtt more deeply)
     });

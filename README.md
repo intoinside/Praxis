@@ -215,38 +215,60 @@ List is a wip and may change in future.
 |-|-|-|
 |`praxis serve`|Expose Praxis commands through a local service for IDE or AI integration.|✅|
 |`praxis agent broker`|Start an embedded MQTT broker for distributed task management.|✅|
+|`praxis agent run`|Start an agent worker to process tasks from the MQTT broker.|✅|
+|`praxis agent ping`|Send a PING task to the agent queue and wait for PONG.|✅|
 |`praxis commands`|List all available commands in machine‑readable form.|❔​|
 
 ---
 
 ## Background Agent & Distributed Architecture
 
-Praxis includes a standalone background agent (daemon) that can execute long-running tasks asynchronously. It supports two modes of operation:
-
-1.  **Local Mode (File-based)**: Simple setup for a single machine using standard file watch polling.
-2.  **Distributed Mode (MQTT)**: Scalable architecture for multiple parallel agents using an MQTT message queue.
+Praxis includes a standalone background agent (daemon) that can execute long-running tasks asynchronously. It uses a **Distributed Architecture (MQTT)** for reliable and scalable communication.
 
 ### Starting the Agent
 
-To start the background agent, run:
+The agent system is composed of two parts:
+1.  **Broker**: Starts the messaging hub (`praxis agent broker`).
+2.  **Worker**: Processes tasks from the queue (`praxis agent run`).
 
-```bash
-praxis serve
-```
-
-By default, this starts the agent in the mode defined in your `.praxisrc.json`.
+Instead of starting them manually, Praxis handles the lifecycle automatically when you queue a task if `enabled: true` is set in your configuration.
 
 ### Distributed Mode & Embedded Broker
 
 In distributed mode, agents connect to an MQTT host to receive tasks via **MQTT 5 Shared Subscriptions** (competing consumers). This allows horizontal scaling where multiple agents can share the workload.
 
-Praxis includes an **embedded MQTT broker** for easy development:
+Praxis includes an **embedded MQTT broker** (Aedes) for easy development:
 
 ```bash
 praxis agent broker --port 1883
 ```
 
-You can configure the agent to **auto-start** the internal broker when `praxis serve` is called by setting `autoStart: true` in your configuration.
+### Auto-Start Logic
+
+Praxis includes **auto-start** logic that ensures the infrastructure is ready when needed:
+-   **Broker Auto-Start**: If using the `internal` broker, Praxis starts it if not detected on the configured port.
+-   **Agent Auto-Start**: Praxis ensures at least one background agent is running to pick up new tasks.
+
+### Health Check (Ping)
+
+You can verify that the entire agent pipeline (broker + worker) is functioning correctly using the following sequence:
+
+1.  **Start the Broker**:
+    ```bash
+    praxis agent broker
+    ```
+2.  **Start an Agent** (in a new terminal):
+    ```bash
+    praxis agent run
+    ```
+3.  **Send a Ping** (in another terminal):
+    ```bash
+    praxis agent ping
+    ```
+
+**What to expect**:
+-   The `ping` command will return control to the console immediately after successfully queuing the task.
+-   The agent terminal will display: `[Agent] Processing task: PingTask (ID: ...)` followed by `PONG`.
 
 ### Configuration (`.praxisrc.json`)
 
@@ -256,12 +278,12 @@ The agent behavior is controlled via a central configuration file. Use `praxis i
 {
   "agent": {
     "enabled": true,
-    "mode": "mqtt",
-    "mqtt": {
-      "type": "internal",
-      "host": "localhost",
-      "port": 1883,
-      "autoStart": true
+    "broker": "internal",
+    "brokerUrl": "mqtt://127.0.0.1:1883",
+    "concurrency": 1,
+    "tasks": {
+      "drift-detection": true,
+      "documentation-update": true
     }
   }
 }

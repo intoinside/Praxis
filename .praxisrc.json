@@ -1,0 +1,12 @@
+{
+    "agent": {
+        "enabled": true,
+        "broker": "internal",
+        "brokerUrl": "mqtt://127.0.0.1:1883",
+        "concurrency": 1,
+        "tasks": {
+            "drift-detection": true,
+            "documentation-update": true
+        }
+    }
+}

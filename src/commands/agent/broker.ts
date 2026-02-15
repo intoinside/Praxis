@@ -6,9 +6,41 @@ import { loadConfig } from '../../core/agent/config.js';
  */
 export async function agentBrokerAction(portOption?: string) {
     const config = loadConfig();
-    const port = portOption ? parseInt(portOption) : (config.agent.mqtt?.port || 1883);
 
-    console.error('Starting Praxis MQTT Broker...');
+    if (!config.agent.enabled) {
+        console.error('Agent support is disabled in configuration.');
+        process.exit(0);
+    }
+
+    if (config.agent.broker === 'external') {
+        console.error('Configured to use an external broker. Internal broker will not start.');
+        process.exit(0);
+    }
+
+    let port = 1883;
+    if (portOption) {
+        port = parseInt(portOption);
+    } else {
+        try {
+            const trimmedUrl = config.agent.brokerUrl.trim();
+            const url = new URL(trimmedUrl);
+            if (url.port) {
+                port = parseInt(url.port);
+            }
+        } catch (e) {
+            // Fallback to regex if URL parsing fails
+            const match = config.agent.brokerUrl.match(/:(\d+)(?:["']|)?$/);
+            if (match) {
+                port = parseInt(match[1]);
+            }
+        }
+    }
+
+    if (isNaN(port)) {
+        port = 1883;
+    }
+
+    console.error(`Starting Praxis MQTT Broker on port ${port}...`);
     console.error('This process acts as the central messaging hub for distributed agents.');
 
     try {
@@ -18,8 +50,13 @@ export async function agentBrokerAction(portOption?: string) {
         // Keep process alive
         process.on('SIGINT', async () => {
             console.error('\nStopping broker...');
-            await mqClient.disconnect();
-            process.exit(0);
+            try {
+                await mqClient.disconnect();
+            } catch (err) {
+                console.error('Error during broker shutdown:', err);
+            } finally {
+                process.exit(0);
+            }
         });
     } catch (error) {
         if (error instanceof Error) {

@@ -12,16 +12,12 @@ export interface MqttConfig {
 
 export interface AgentConfig {
     enabled: boolean;
-    mode: 'file' | 'mqtt';
-    services: {
-        mcp: boolean;
-        taskPolling: boolean;
-    };
+    broker: 'internal' | 'external';
+    brokerUrl: string;
+    concurrency: number;
     tasks: {
         [key: string]: boolean;
     };
-    pollIntervalMs: number;
-    mqtt?: MqttConfig;
 }
 
 export interface PraxisConfig {
@@ -31,22 +27,12 @@ export interface PraxisConfig {
 export const DEFAULT_CONFIG: PraxisConfig = {
     agent: {
         enabled: true,
-        mode: 'file',
-        services: {
-            mcp: true,
-            taskPolling: true
-        },
+        broker: 'internal',
+        brokerUrl: 'mqtt://127.0.0.1:1883',
+        concurrency: 1,
         tasks: {
             'drift-detection': true,
             'documentation-update': true
-        },
-        pollIntervalMs: 3000,
-        mqtt: {
-            type: 'internal',
-            host: '127.0.0.1',
-            port: 1883,
-            autoStart: false,
-            useSharedSubscription: true
         }
     }
 };

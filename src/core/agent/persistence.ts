@@ -51,11 +51,9 @@ export async function queueTask(type: string, payload?: any) {
     saveTasks(tasks);
     console.log(`Task queued locally: ${id}`);
 
-    if (config.agent.mode === 'mqtt' && config.agent.mqtt) {
+    if (config.agent.enabled) {
         try {
-            await mqClient.connect(config.agent.mqtt);
             await mqClient.publishTask(task);
-            await mqClient.disconnect();
             console.log(`Task published to MQTT: ${id}`);
         } catch (e) {
             console.error(`Failed to publish task to MQTT: ${e instanceof Error ? e.message : String(e)}`);
