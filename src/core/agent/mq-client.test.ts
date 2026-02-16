@@ -10,8 +10,11 @@ vi.mock('mqtt', () => ({
                 if (event === 'connect') setTimeout(cb, 0);
             }),
             subscribe: vi.fn(),
-            publish: vi.fn(),
-            endAsync: vi.fn()
+            publish: vi.fn((topic, msg, opts, cb) => {
+                if (typeof opts === 'function') opts();
+                else if (typeof cb === 'function') cb();
+            }),
+            endAsync: vi.fn().mockResolvedValue(undefined)
         })
     }
 }));

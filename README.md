@@ -213,7 +213,6 @@ List is a wip and may change in future.
 
 |Command|Description|Status/Version|
 |-|-|-|
-|`praxis serve`|Expose Praxis commands through a local service for IDE or AI integration.|✅|
 |`praxis agent broker`|Start an embedded MQTT broker for distributed task management.|✅|
 |`praxis agent run`|Start an agent worker to process tasks from the MQTT broker.|✅|
 |`praxis agent ping`|Send a PING task to the agent queue and wait for PONG.|✅|
@@ -288,21 +287,6 @@ The agent behavior is controlled via a central configuration file. Use `praxis i
   }
 }
 ```
-
-### IDE Integration (MCP)
-
-The agent communicates using the **Model Context Protocol (MCP)** when running via `praxis serve`. This allows any MCP-compatible AI (Claude Desktop, Cursor, Isaac) to:
-- List active background tasks.
-- Start long-running operations (like drift analysis).
-- Subscribe to progress updates.
-
-#### Available MCP Tools
-
-| Tool | Description | Parameters |
-|------|-------------|------------|
-| `list_tasks` | List all current background tasks and their status. | None |
-| `start_drift_detection` | Triggers a background drift analysis. | `id` (required): Unique task identifier. |
-| `get_task_status` | Retrieves progress and status of a specific task. | `id` (required): Task identifier. |
 
 ---
 

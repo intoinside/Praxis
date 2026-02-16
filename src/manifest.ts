@@ -9,7 +9,6 @@ import { specApplyAction } from './commands/spec/apply.js';
 import { specArchiveAction } from './commands/spec/archive.js';
 import { specListAction } from './commands/spec/list.js';
 import { specValidateAction } from './commands/spec/validate.js';
-import { integrationServeAction } from './commands/integration/serve.js';
 import { agentBrokerAction } from './commands/agent/broker.js';
 import { agentRunAction } from './commands/agent/run.js';
 import { agentPingAction } from './commands/agent/ping.js';
@@ -220,17 +219,6 @@ export const manifest: CommandDefinition[] = [
         name: 'ping',
         description: 'Send a PING task to the agent queue',
         action: agentPingAction
-      }
-    ]
-  },
-  {
-    name: 'serve',
-    description: 'Expose Praxis commands through a local service',
-    action: integrationServeAction,
-    options: [
-      {
-        name: 'no-mcp',
-        description: 'Disable MCP server',
       }
     ]
   },
