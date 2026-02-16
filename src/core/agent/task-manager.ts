@@ -2,14 +2,21 @@ import { BackgroundTask } from './tasks/base.js';
 import { loadTasks, saveTasks } from './persistence.js';
 import { DocumentationUpdateTask } from './tasks/documentation-update.js';
 import { DriftDetectionTask } from './tasks/drift-detection.js';
+import { PingTask } from './tasks/ping.js';
+import { mqClient, TaskMessage } from './mq-client.js';
+import { loadConfig } from './config.js';
 
 export class TaskManager {
     private tasks: Map<string, BackgroundTask> = new Map();
     private activeCount: number = 0;
     private maxConcurrency: number = 1; // Default to 1 to avoid conflicts
 
-    constructor(maxConcurrency: number = 1) {
-        this.maxConcurrency = maxConcurrency;
+    constructor() {
+        // Concurrency is now managed via config
+    }
+
+    private getConcurrency(): number {
+        return loadConfig().agent.concurrency || 1;
     }
 
     addTask(task: BackgroundTask) {
@@ -26,7 +33,7 @@ export class TaskManager {
     }
 
     private schedule() {
-        if (this.activeCount >= this.maxConcurrency) return;
+        if (this.activeCount >= this.getConcurrency()) return;
 
         const pendingTask = this.getAllTasks().find(t => t.status === 'pending');
         if (pendingTask) {
@@ -36,12 +43,16 @@ export class TaskManager {
 
     private async runTask(task: BackgroundTask) {
         this.activeCount++;
+        console.error(`[Agent] Processing task: ${task.constructor.name} (ID: ${task.id})`);
         this.updatePersistentTaskStatus(task.id, 'running');
+        mqClient.publishStatus(task.id, 'running').catch(() => { });
         try {
             await task.run();
             this.updatePersistentTaskStatus(task.id, 'completed');
+            mqClient.publishStatus(task.id, 'completed').catch(() => { });
         } catch (e) {
             this.updatePersistentTaskStatus(task.id, 'failed');
+            mqClient.publishStatus(task.id, 'failed', { error: e instanceof Error ? e.message : String(e) }).catch(() => { });
         } finally {
             this.activeCount--;
             this.schedule();
@@ -57,27 +68,24 @@ export class TaskManager {
         }
     }
 
-    public startPolling(intervalMs: number = 3000) {
-        setInterval(() => {
-            const persistentTasks = loadTasks();
-            const pending = persistentTasks.filter(t => t.status === 'pending');
+    public startMqListener(useShared: boolean = true) {
+        mqClient.subscribeToTasks((msg: TaskMessage) => {
+            if (!this.tasks.has(msg.id)) {
+                let task: BackgroundTask | null = null;
+                if (msg.type === 'documentation-update') {
+                    task = new DocumentationUpdateTask(msg.id);
+                } else if (msg.type === 'drift-detection') {
+                    task = new DriftDetectionTask(msg.id);
+                } else if (msg.type === 'ping') {
+                    task = new PingTask(msg.id);
+                }
 
-            for (const p of pending) {
-                if (!this.tasks.has(p.id)) {
-                    // Instantiate the correct task type
-                    let task: BackgroundTask | null = null;
-                    if (p.type === 'documentation-update') {
-                        task = new DocumentationUpdateTask(p.id);
-                    } else if (p.type === 'drift-detection') {
-                        task = new DriftDetectionTask(p.id);
-                    }
-
-                    if (task) {
-                        this.addTask(task);
-                    }
+                if (task) {
+                    this.addTask(task);
+                    console.error(`Acquired task via MQTT: ${msg.id}`);
                 }
             }
-        }, intervalMs);
+        }, useShared);
     }
 }
 

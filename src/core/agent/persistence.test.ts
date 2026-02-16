@@ -1,10 +1,26 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import fs from 'fs';
 import { queueTask, loadTasks } from './persistence.js';
+import { mqClient } from './mq-client.js';
 
 vi.mock('fs');
 vi.mock('../utils.js', () => ({
     PRAXIS_DIR: '.praxis'
+}));
+
+vi.mock('./config.js', () => ({
+    loadConfig: vi.fn().mockReturnValue({
+        agent: { enabled: true, broker: 'internal', brokerUrl: 'mqtt://localhost:1883' }
+    })
+}));
+
+vi.mock('./mq-client.js', () => ({
+    mqClient: {
+        connect: vi.fn(),
+        publishTask: vi.fn(),
+        publishStatus: vi.fn(),
+        disconnect: vi.fn()
+    }
 }));
 
 describe('Task Persistence', () => {
@@ -12,11 +28,11 @@ describe('Task Persistence', () => {
         vi.clearAllMocks();
     });
 
-    it('should queue a new task', () => {
+    it('should queue a new task', async () => {
         vi.mocked(fs.existsSync).mockReturnValue(false);
         vi.mocked(fs.readFileSync).mockReturnValue('[]');
 
-        queueTask('test-task', { foo: 'bar' });
+        await queueTask('test-task', { foo: 'bar' });
 
         expect(fs.writeFileSync).toHaveBeenCalledWith(
             expect.stringContaining('tasks.json'),
@@ -41,5 +57,16 @@ describe('Task Persistence', () => {
 
         const tasks = loadTasks();
         expect(tasks).toEqual([]);
+    });
+
+    it('should publish to MQTT when agent is enabled', async () => {
+        vi.mocked(fs.existsSync).mockReturnValue(false);
+        vi.mocked(fs.readFileSync).mockReturnValue('[]');
+
+        await queueTask('mq-task', { test: true });
+
+        expect(mqClient.publishTask).toHaveBeenCalledWith(expect.objectContaining({
+            type: 'mq-task'
+        }));
     });
 });

@@ -23,7 +23,7 @@ describe('Config Utils', () => {
         const config = loadConfig();
         expect(config.agent.enabled).toBe(false);
         // Should merge with defaults
-        expect(config.agent.pollIntervalMs).toBe(3000);
+        expect(config.agent.concurrency).toBe(1);
     });
 
     it('should save config to file', () => {

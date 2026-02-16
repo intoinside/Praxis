@@ -1,16 +1,23 @@
 import fs from 'fs';
 import path from 'path';
 
+export interface MqttConfig {
+    type: 'internal' | 'external';
+    host: string;
+    port: number;
+    clientId?: string;
+    autoStart?: boolean;
+    useSharedSubscription?: boolean;
+}
+
 export interface AgentConfig {
     enabled: boolean;
-    services: {
-        mcp: boolean;
-        taskPolling: boolean;
-    };
+    broker: 'internal' | 'external';
+    brokerUrl: string;
+    concurrency: number;
     tasks: {
         [key: string]: boolean;
     };
-    pollIntervalMs: number;
 }
 
 export interface PraxisConfig {
@@ -20,15 +27,13 @@ export interface PraxisConfig {
 export const DEFAULT_CONFIG: PraxisConfig = {
     agent: {
         enabled: true,
-        services: {
-            mcp: true,
-            taskPolling: true
-        },
+        broker: 'internal',
+        brokerUrl: 'mqtt://127.0.0.1:1883',
+        concurrency: 1,
         tasks: {
             'drift-detection': true,
             'documentation-update': true
-        },
-        pollIntervalMs: 3000
+        }
     }
 };
 

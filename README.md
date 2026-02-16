@@ -213,39 +213,80 @@ List is a wip and may change in future.
 
 |Command|Description|Status/Version|
 |-|-|-|
-|`praxis serve`|Expose Praxis commands through a local service for IDE or AI integration.|✅|
+|`praxis agent broker`|Start an embedded MQTT broker for distributed task management.|✅|
+|`praxis agent run`|Start an agent worker to process tasks from the MQTT broker.|✅|
+|`praxis agent ping`|Send a PING task to the agent queue and wait for PONG.|✅|
 |`praxis commands`|List all available commands in machine‑readable form.|❔​|
 
 ---
 
-## Background Agent & MCP
+## Background Agent & Distributed Architecture
 
-Praxis includes a standalone background agent (daemon) that can execute long-running tasks asynchronously while you continue coding. This agent communicates using the **Model Context Protocol (MCP)**.
+Praxis includes a standalone background agent (daemon) that can execute long-running tasks asynchronously. It uses a **Distributed Architecture (MQTT)** for reliable and scalable communication.
 
 ### Starting the Agent
 
-To start the background agent, run the following command in your terminal:
+The agent system is composed of two parts:
+1.  **Broker**: Starts the messaging hub (`praxis agent broker`).
+2.  **Worker**: Processes tasks from the queue (`praxis agent run`).
+
+Instead of starting them manually, Praxis handles the lifecycle automatically when you queue a task if `enabled: true` is set in your configuration.
+
+### Distributed Mode & Embedded Broker
+
+In distributed mode, agents connect to an MQTT host to receive tasks via **MQTT 5 Shared Subscriptions** (competing consumers). This allows horizontal scaling where multiple agents can share the workload.
+
+Praxis includes an **embedded MQTT broker** (Aedes) for easy development:
 
 ```bash
-praxis serve
+praxis agent broker --port 1883
 ```
 
-The agent will start an MCP server on `stdio`. This process must remain running to handle background requests.
+### Auto-Start Logic
 
-### IDE Integration (MCP)
+Praxis includes **auto-start** logic that ensures the infrastructure is ready when needed:
+-   **Broker Auto-Start**: If using the `internal` broker, Praxis starts it if not detected on the configured port.
+-   **Agent Auto-Start**: Praxis ensures at least one background agent is running to pick up new tasks.
 
-Since Praxis uses MCP, you can connect it directly to compatible AI IDEs or tools (like Claude Desktop, Cursor, or Isaac). This allows the AI agent in your IDE to:
-- List active background tasks.
-- Start long-running operations (like drift analysis).
-- Subcribe to progress updates.
+### Health Check (Ping)
 
-#### Available MCP Tools
+You can verify that the entire agent pipeline (broker + worker) is functioning correctly using the following sequence:
 
-| Tool | Description | Parameters |
-|------|-------------|------------|
-| `list_tasks` | List all current background tasks and their status. | None |
-| `start_drift_detection` | Triggers a background drift analysis. | `id` (required): Unique task identifier. |
-| `get_task_status` | Retrieves progress and status of a specific task. | `id` (required): Task identifier. |
+1.  **Start the Broker**:
+    ```bash
+    praxis agent broker
+    ```
+2.  **Start an Agent** (in a new terminal):
+    ```bash
+    praxis agent run
+    ```
+3.  **Send a Ping** (in another terminal):
+    ```bash
+    praxis agent ping
+    ```
+
+**What to expect**:
+-   The `ping` command will return control to the console immediately after successfully queuing the task.
+-   The agent terminal will display: `[Agent] Processing task: PingTask (ID: ...)` followed by `PONG`.
+
+### Configuration (`.praxisrc.json`)
+
+The agent behavior is controlled via a central configuration file. Use `praxis init` to configure it interactively.
+
+```json
+{
+  "agent": {
+    "enabled": true,
+    "broker": "internal",
+    "brokerUrl": "mqtt://127.0.0.1:1883",
+    "concurrency": 1,
+    "tasks": {
+      "drift-detection": true,
+      "documentation-update": true
+    }
+  }
+}
+```
 
 ---
 

@@ -9,7 +9,9 @@ import { specApplyAction } from './commands/spec/apply.js';
 import { specArchiveAction } from './commands/spec/archive.js';
 import { specListAction } from './commands/spec/list.js';
 import { specValidateAction } from './commands/spec/validate.js';
-import { integrationServeAction } from './commands/integration/serve.js';
+import { agentBrokerAction } from './commands/agent/broker.js';
+import { agentRunAction } from './commands/agent/run.js';
+import { agentPingAction } from './commands/agent/ping.js';
 
 /**
  * Praxis Command Manifest
@@ -193,6 +195,34 @@ export const manifest: CommandDefinition[] = [
     ],
   },
   {
+    name: 'agent',
+    description: 'Manage background agents and the messaging broker',
+    subcommands: [
+      {
+        name: 'broker',
+        description: 'Start an embedded MQTT broker for distributed task management',
+        action: agentBrokerAction,
+        options: [
+          {
+            name: 'port',
+            description: 'The port to listen on (default: 1883)',
+            alias: 'p'
+          }
+        ]
+      },
+      {
+        name: 'run',
+        description: 'Start an agent worker to process tasks from the MQTT broker',
+        action: agentRunAction
+      },
+      {
+        name: 'ping',
+        description: 'Send a PING task to the agent queue',
+        action: agentPingAction
+      }
+    ]
+  },
+  {
     name: 'analyze',
     description: 'Analyze impact and drift',
     subcommands: [
@@ -217,25 +247,6 @@ export const manifest: CommandDefinition[] = [
     name: 'integration',
     description: 'IDE and AI integration',
     subcommands: [
-      {
-        name: 'serve',
-        description: 'Expose Praxis commands through a local service',
-        action: integrationServeAction,
-        options: [
-          {
-            name: 'no-mcp',
-            description: 'Disable MCP server',
-          },
-          {
-            name: 'no-polling',
-            description: 'Disable background task polling',
-          },
-          {
-            name: 'poll-interval',
-            description: 'Interval in milliseconds for task polling',
-          }
-        ]
-      },
       {
         name: 'commands',
         description: 'List all available commands in machine-readable form',

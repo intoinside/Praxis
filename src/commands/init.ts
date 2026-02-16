@@ -41,17 +41,28 @@ export async function initCommand(projectName?: string) {
             default: true
         },
         {
-            type: 'confirm',
-            name: 'enableMcp',
-            message: 'Do you want to enable the MCP server for IDE integration?',
-            default: true,
+            type: 'list',
+            name: 'brokerType',
+            message: 'What type of MQTT broker do you want to use?',
+            choices: [
+                { name: 'Internal (embedded in Praxis)', value: 'internal' },
+                { name: 'External (requires a broker URL)', value: 'external' }
+            ],
+            default: 'internal',
             when: (ans) => ans.enableAgent
         },
         {
-            type: 'confirm',
-            name: 'enablePolling',
-            message: 'Do you want to enable background task polling?',
-            default: true,
+            type: 'input',
+            name: 'brokerUrl',
+            message: 'What is the MQTT broker URL?',
+            default: 'mqtt://127.0.0.1:1883',
+            when: (ans) => ans.enableAgent && ans.brokerType === 'external'
+        },
+        {
+            type: 'number',
+            name: 'concurrency',
+            message: 'How many concurrent tasks should each agent handle?',
+            default: 1,
             when: (ans) => ans.enableAgent
         }
     ]);
@@ -59,8 +70,9 @@ export async function initCommand(projectName?: string) {
     const config = { ...DEFAULT_CONFIG };
     config.agent.enabled = answers.enableAgent;
     if (answers.enableAgent) {
-        config.agent.services.mcp = answers.enableMcp;
-        config.agent.services.taskPolling = answers.enablePolling;
+        config.agent.broker = answers.brokerType;
+        config.agent.brokerUrl = answers.brokerUrl || config.agent.brokerUrl;
+        config.agent.concurrency = answers.concurrency || 1;
     }
 
     // Initialize directories
