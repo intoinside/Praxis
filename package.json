@@ -18,7 +18,8 @@
     "aedes": "^1.0.0",
     "commander": "^14.0.2",
     "inquirer": "^13.2.2",
-    "mqtt": "^5.15.0"
+    "mqtt": "^5.15.0",
+    "uuid": "^13.0.0"
   },
   "scripts": {
     "build": "tsc",
@@ -50,6 +51,7 @@
   "homepage": "https://github.com/intoinside/Praxis#readme",
   "devDependencies": {
     "@types/node": "^25.0.10",
+    "@types/uuid": "^10.0.0",
     "@vitest/coverage-v8": "^4.0.18",
     "rimraf": "^6.0.1",
     "ts-node": "^10.9.2",

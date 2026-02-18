@@ -12,6 +12,7 @@ import { specValidateAction } from './commands/spec/validate.js';
 import { agentBrokerAction } from './commands/agent/broker.js';
 import { agentRunAction } from './commands/agent/run.js';
 import { agentPingAction } from './commands/agent/ping.js';
+import { agentAskAction } from './commands/agent/ask.js';
 
 /**
  * Praxis Command Manifest
@@ -219,6 +220,18 @@ export const manifest: CommandDefinition[] = [
         name: 'ping',
         description: 'Send a PING task to the agent queue',
         action: agentPingAction
+      },
+      {
+        name: 'ask',
+        description: 'Ask the agent a question using LLM',
+        action: agentAskAction,
+        arguments: [
+          {
+            name: 'prompt',
+            description: 'The prompt to send to the agent',
+            required: true
+          }
+        ]
       }
     ]
   },

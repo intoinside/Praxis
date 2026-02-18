@@ -216,6 +216,7 @@ List is a wip and may change in future.
 |`praxis agent broker`|Start an embedded MQTT broker for distributed task management.|✅|
 |`praxis agent run`|Start an agent worker to process tasks from the MQTT broker.|✅|
 |`praxis agent ping`|Send a PING task to the agent queue and wait for PONG.|✅|
+|`praxis agent ask <prompt>`|Send a prompt to the agent via LLM.|✅|
 |`praxis commands`|List all available commands in machine‑readable form.|❔​|
 
 ---
@@ -283,10 +284,29 @@ The agent behavior is controlled via a central configuration file. Use `praxis i
     "tasks": {
       "drift-detection": true,
       "documentation-update": true
+    },
+    "llm": {
+      "provider": "openai",
+      "apiKey": "YOUR_OPENAI_API_KEY",
+      "model": "gpt-3.5-turbo",
+      "options": {
+        "baseUrl": "https://api.openai.com/v1"
+      }
     }
   }
 }
 ```
+
+### LLM Integration
+
+Praxis agents can interact with LLMs. To use this feature, configure the `llm` section in `.praxisrc.json` as shown above.
+
+You can then interact with the agent using the `ask` command:
+
+```bash
+praxis agent ask "Explain the purpose of this project"
+```
+
 
 ---
 

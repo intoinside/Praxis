@@ -3,6 +3,7 @@ import { loadTasks, saveTasks } from './persistence.js';
 import { DocumentationUpdateTask } from './tasks/documentation-update.js';
 import { DriftDetectionTask } from './tasks/drift-detection.js';
 import { PingTask } from './tasks/ping.js';
+import { LLMChatTask } from './tasks/llm-chat.js';
 import { mqClient, TaskMessage } from './mq-client.js';
 import { loadConfig } from './config.js';
 
@@ -78,6 +79,8 @@ export class TaskManager {
                     task = new DriftDetectionTask(msg.id);
                 } else if (msg.type === 'ping') {
                     task = new PingTask(msg.id);
+                } else if (msg.type === 'llm-chat') {
+                    task = new LLMChatTask(msg.id, msg.payload.prompt, msg.payload.system);
                 }
 
                 if (task) {

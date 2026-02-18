@@ -18,6 +18,12 @@ export interface AgentConfig {
     tasks: {
         [key: string]: boolean;
     };
+    llm?: {
+        provider: 'openai' | 'anthropic' | 'custom';
+        apiKey: string;
+        model: string;
+        options?: Record<string, any>;
+    };
 }
 
 export interface PraxisConfig {
