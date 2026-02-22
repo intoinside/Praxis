@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Praxis — Intent‑Driven Development Framework</title>
+    <meta name="description"
+        content="Praxis bridges Intent‑Driven Development and Spec‑Driven Development into a single, coherent workflow. AI‑native, CLI‑first, intent‑centric." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+    <!-- ─── HERO BACKGROUND CANVAS ─────────────────────────────────────── -->
+    <canvas id="hero-canvas"></canvas>
+
+    <!-- ─── NAVBAR ─────────────────────────────────────────────────────── -->
+    <nav id="navbar">
+        <div class="nav-inner">
+            <a href="#" class="nav-logo" id="nav-logo-link">
+                <span class="logo-bracket">[</span>Praxis<span class="logo-bracket">]</span>
+            </a>
+            <ul class="nav-links" id="nav-links">
+                <li><a href="#concepts" class="nav-link">Core Concepts</a></li>
+                <li><a href="#features" class="nav-link">Features</a></li>
+                <li><a href="#workflow" class="nav-link">Workflow</a></li>
+                <li><a href="#install" class="nav-link">Install</a></li>
+            </ul>
+            <a href="https://github.com/intoinside/praxis" target="_blank" rel="noopener noreferrer"
+                class="btn btn-ghost" id="github-nav-btn">
+                <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path
+                        d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4-1.6-.5-1.4-1.3-1.8-1.3-1.8-1-.7.1-.7.1-.7 1.1.1 1.7 1.2 1.7 1.2 1 1.7 2.6 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.6-.3-5.4-1.3-5.4-5.9 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.4 11.4 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.7.2 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .3" />
+                </svg>
+                GitHub
+            </a>
+        </div>
+    </nav>
+
+    <!-- ─── HERO ───────────────────────────────────────────────────────── -->
+    <section id="hero">
+        <div class="hero-content">
+            <div class="hero-badge" id="hero-badge">
+                <span class="badge-dot"></span>
+                Active Development
+            </div>
+            <h1 class="hero-title" id="hero-title">
+                Code with<br />
+                <span class="gradient-text">Intent and Spec</span>
+            </h1>
+            <p class="hero-subtitle" id="hero-subtitle">
+                Praxis bridges <strong>Intent‑Driven Development</strong> and <strong>Spec‑Driven Development</strong>
+                into a single, coherent workflow — AI‑native, CLI‑first, intent‑centric.
+            </p>
+            <div class="hero-actions" id="hero-actions">
+                <a href="#install" class="btn btn-primary" id="hero-install-btn">
+                    Get Started
+                    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg>
+                </a>
+                <a href="https://github.com/intoinside/praxis" target="_blank" rel="noopener noreferrer"
+                    class="btn btn-outline" id="hero-github-btn">
+                    <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                            d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4-1.6-.5-1.4-1.3-1.8-1.3-1.8-1-.7.1-.7.1-.7 1.1.1 1.7 1.2 1.7 1.2 1 1.7 2.6 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.6-.3-5.4-1.3-5.4-5.9 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.4 11.4 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.7.2 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .3" />
+                    </svg>
+                    View on GitHub
+                </a>
+            </div>
+
+            <!-- Terminal mock-up -->
+            <div class="terminal" id="hero-terminal">
+                <div class="terminal-header">
+                    <span class="terminal-dot red"></span>
+                    <span class="terminal-dot yellow"></span>
+                    <span class="terminal-dot green"></span>
+                    <span class="terminal-title">bash</span>
+                </div>
+                <div class="terminal-body" id="terminal-body">
+                    <div class="term-line"><span class="term-prompt">$</span> <span class="term-cmd">npm install -g
+                            @intoinside/praxis</span></div>
+                    <div class="term-line term-out">+ @intoinside/praxis@latest — installed successfully ✓</div>
+                    <div class="term-line"><span class="term-prompt">$</span> <span class="term-cmd">praxis init
+                            my-project</span></div>
+                    <div class="term-line term-out">✔ Product info created</div>
+                    <div class="term-line term-out">✔ Folder structure initialised</div>
+                    <div class="term-line"><span class="term-prompt">$</span> <span class="term-cmd">praxis intent
+                            create "User authentication"</span></div>
+                    <div class="term-line term-out">✔ Intent <span class="term-highlight">INT-001</span> created in
+                        .praxis/intents/wip/</div>
+                    <div class="term-line"><span class="term-prompt">$</span> <span class="term-cursor">▋</span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── CORE CONCEPTS ─────────────────────────────────────────────── -->
+    <section id="concepts" class="section">
+        <div class="container">
+            <div class="section-label">Core Concepts</div>
+            <h2 class="section-title">The <span class="gradient-text">three pillars</span> of Praxis</h2>
+            <p class="section-desc">Start from <em>why</em>, derive <em>what</em>, verify the <em>how</em> —
+                continuously.</p>
+
+            <div class="concepts-grid">
+
+                <div class="concept-card" id="concept-intent">
+                    <div class="concept-icon">
+                        <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.5"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M12 18.75a6 6 0 0 0 6-6v-1.5m-6 7.5a6 6 0 0 1-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 0 1-3-3V4.5a3 3 0 1 1 6 0v8.25a3 3 0 0 1-3 3Z" />
+                        </svg>
+                    </div>
+                    <div class="concept-number">01</div>
+                    <h3>Intent</h3>
+                    <p>Describes the <em>purpose, value, and constraints</em> of a feature. Technology‑agnostic. Answers
+                        the foundational question: <strong>Why are we building this?</strong></p>
+                    <div class="concept-tags">
+                        <span class="tag">Purpose</span>
+                        <span class="tag">Value</span>
+                        <span class="tag">Constraints</span>
+                    </div>
+                </div>
+
+                <div class="concept-card" id="concept-spec">
+                    <div class="concept-icon">
+                        <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.5"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25ZM6.75 12h.008v.008H6.75V12Zm0 3h.008v.008H6.75V15Zm0 3h.008v.008H6.75V18Z" />
+                        </svg>
+                    </div>
+                    <div class="concept-number">02</div>
+                    <h3>Specification</h3>
+                    <p>A formal, verifiable description <em>derived from an Intent</em>. Acts as a contract. Answers:
+                        <strong>What must the system do?</strong>
+                    </p>
+                    <div class="concept-tags">
+                        <span class="tag">Contracts</span>
+                        <span class="tag">Acceptance Criteria</span>
+                        <span class="tag">Test Cases</span>
+                    </div>
+                </div>
+
+                <div class="concept-card" id="concept-drift">
+                    <div class="concept-icon">
+                        <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.5"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 0 1 0 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 0 1 0-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28Z" />
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                        </svg>
+                    </div>
+                    <div class="concept-number">03</div>
+                    <h3>Drift Detection</h3>
+                    <p>Continuously checks for <em>semantic drift</em> — specs that no longer satisfy the intent, or
+                        code that implements features with no backing intent.</p>
+                    <div class="concept-tags">
+                        <span class="tag">Alignment</span>
+                        <span class="tag">Audit</span>
+                        <span class="tag">Traceability</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── FEATURES ──────────────────────────────────────────────────── -->
+    <section id="features" class="section section-alt">
+        <div class="container">
+            <div class="section-label">Features</div>
+            <h2 class="section-title">Everything you need to <span class="gradient-text">stay aligned</span></h2>
+
+            <div class="features-grid">
+
+                <div class="feature-card" id="feature-intent-mgmt">
+                    <div class="feature-header">
+                        <div class="feature-icon icon-violet">
+                            <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
+                            </svg>
+                        </div>
+                        <h3>Intent Management</h3>
+                    </div>
+                    <p>Create, validate, and track intents over time. Enforce structure and clarity from day one.</p>
+                    <div class="feature-code">
+                        <code>praxis intent create "Payment gateway"</code>
+                        <code>praxis intent validate INT-001</code>
+                        <code>praxis intent list</code>
+                    </div>
+                </div>
+
+                <div class="feature-card" id="feature-spec-derive">
+                    <div class="feature-header">
+                        <div class="feature-icon icon-teal">
+                            <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456Z" />
+                            </svg>
+                        </div>
+                        <h3>Spec Derivation</h3>
+                    </div>
+                    <p>Generate initial specifications automatically from intents, maintaining full traceability between
+                        the two layers.</p>
+                    <div class="feature-code">
+                        <code>praxis spec derive --from-intent INT-001</code>
+                        <code>praxis spec validate SPEC-001</code>
+                    </div>
+                </div>
+
+                <div class="feature-card" id="feature-spec-apply">
+                    <div class="feature-header">
+                        <div class="feature-icon icon-amber">
+                            <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M17.25 6.75 22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3-4.5 16.5" />
+                            </svg>
+                        </div>
+                        <h3>Spec Implementation</h3>
+                    </div>
+                    <p>Send a spec directly to the AI agent, which implements it in code. Verify compliance at any time.
+                    </p>
+                    <div class="feature-code">
+                        <code>praxis spec apply SPEC-001</code>
+                        <code>praxis spec check SPEC-001</code>
+                    </div>
+                </div>
+
+                <div class="feature-card" id="feature-agent">
+                    <div class="feature-header">
+                        <div class="feature-icon icon-pink">
+                            <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M8.288 15.038a5.25 5.25 0 0 1 7.424 0M5.106 11.856c3.807-3.808 9.98-3.808 13.788 0M1.924 8.674c5.565-5.565 14.587-5.565 20.152 0M12.53 18.22l-.53.53-.53-.53a.75.75 0 0 1 1.06 0Z" />
+                            </svg>
+                        </div>
+                        <h3>Background Agent</h3>
+                    </div>
+                    <p>A standalone daemon with MQTT‑based distributed architecture. Horizontal scaling via shared
+                        subscriptions.</p>
+                    <div class="feature-code">
+                        <code>praxis agent broker</code>
+                        <code>praxis agent run</code>
+                        <code>praxis agent ask "Explain this project"</code>
+                    </div>
+                </div>
+
+                <div class="feature-card" id="feature-ai">
+                    <div class="feature-header">
+                        <div class="feature-icon icon-cyan">
+                            <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
+                            </svg>
+                        </div>
+                        <h3>AI &amp; IDE Integration</h3>
+                    </div>
+                    <p>Slash‑command friendly from the start. Map any Praxis command to AI chat prompts in VS Code or
+                        any editor.</p>
+                    <div class="feature-code">
+                        <code>/praxis-intent-create</code>
+                        <code>/praxis-spec-derive</code>
+                        <code>/praxis-intent-check</code>
+                    </div>
+                </div>
+
+                <div class="feature-card feature-card-wide" id="feature-philosophy">
+                    <div class="feature-header">
+                        <div class="feature-icon icon-green">
+                            <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M9 12.75 11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 0 1-1.043 3.296 3.745 3.745 0 0 1-3.296 1.043A3.745 3.745 0 0 1 12 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 0 1-3.296-1.043 3.745 3.745 0 0 1-1.043-3.296A3.745 3.745 0 0 1 3 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 0 1 1.043-3.296 3.746 3.746 0 0 1 3.296-1.043A3.746 3.746 0 0 1 12 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 0 1 3.296 1.043 3.746 3.746 0 0 1 1.043 3.296A3.745 3.745 0 0 1 21 12Z" />
+                            </svg>
+                        </div>
+                        <h3>Design Philosophy</h3>
+                    </div>
+                    <div class="philosophy-grid">
+                        <div class="philosophy-item">
+                            <span class="phi-mark">✦</span>
+                            <span><strong>Intent is sacred</strong> — everything traces back to a reason.</span>
+                        </div>
+                        <div class="philosophy-item">
+                            <span class="phi-mark">✦</span>
+                            <span><strong>Specs are contracts</strong> — informal requirements are not enough.</span>
+                        </div>
+                        <div class="philosophy-item">
+                            <span class="phi-mark">✦</span>
+                            <span><strong>Code must justify itself</strong> — no feature without intent.</span>
+                        </div>
+                        <div class="philosophy-item">
+                            <span class="phi-mark">✦</span>
+                            <span><strong>AI is an assistant</strong> — Praxis stays deterministic and auditable.</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── WORKFLOW ───────────────────────────────────────────────────── -->
+    <section id="workflow" class="section">
+        <div class="container">
+            <div class="section-label">Workflow</div>
+            <h2 class="section-title">From <span class="gradient-text">Intent to Code</span></h2>
+            <p class="section-desc">A clear, step‑by‑step process that keeps intent and implementation in sync.</p>
+
+            <div class="workflow-steps">
+
+                <div class="workflow-step" id="wf-step-1">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Initialize</h3>
+                        <p>Bootstrap your project with Praxis, creating product‑info artifacts and ready‑to‑use folder
+                            structure.</p>
+                        <div class="step-cmd"><code>praxis init my-project</code></div>
+                    </div>
+                </div>
+
+                <div class="workflow-connector">
+                    <div class="connector-line"></div>
+                </div>
+
+                <div class="workflow-step" id="wf-step-2">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Capture Intent</h3>
+                        <p>Express <em>why</em> you are building a feature. Review and enhance the generated intent
+                            document.</p>
+                        <div class="step-cmd"><code>praxis intent create "…"</code></div>
+                    </div>
+                </div>
+
+                <div class="workflow-connector">
+                    <div class="connector-line"></div>
+                </div>
+
+                <div class="workflow-step" id="wf-step-3">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Derive Specs</h3>
+                        <p>Automatically generate formal specifications from the validated intent. Refine them if
+                            needed.</p>
+                        <div class="step-cmd"><code>praxis spec derive --from-intent INT-001</code></div>
+                    </div>
+                </div>
+
+                <div class="workflow-connector">
+                    <div class="connector-line"></div>
+                </div>
+
+                <div class="workflow-step" id="wf-step-4">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3>Implement</h3>
+                        <p>Let the AI agent write the code from the spec. No guesswork — the contract is explicit.</p>
+                        <div class="step-cmd"><code>praxis spec apply SPEC-001</code></div>
+                    </div>
+                </div>
+
+                <div class="workflow-connector">
+                    <div class="connector-line"></div>
+                </div>
+
+                <div class="workflow-step" id="wf-step-5">
+                    <div class="step-number">5</div>
+                    <div class="step-content">
+                        <h3>Verify &amp; Archive</h3>
+                        <p>Check that the implementation satisfies the spec, then archive both spec and intent.</p>
+                        <div class="step-cmd"><code>praxis spec archive SPEC-001</code></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── INSTALL ───────────────────────────────────────────────────── -->
+    <section id="install" class="section section-alt">
+        <div class="container install-container">
+            <div class="install-text">
+                <div class="section-label">Installation</div>
+                <h2 class="section-title">Up and running in <span class="gradient-text">seconds</span></h2>
+                <p>Praxis is a Node.js CLI written in TypeScript. Requires Node.js ≥ 18.</p>
+
+                <ul class="install-checklist">
+                    <li>
+                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                        </svg>
+                        Global install via npm
+                    </li>
+                    <li>
+                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                        </svg>
+                        Works with any IDE or AI Chat
+                    </li>
+                    <li>
+                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                        </svg>
+                        CLI‑first, no GUI required
+                    </li>
+                </ul>
+
+                <a href="https://github.com/intoinside/praxis" target="_blank" rel="noopener noreferrer"
+                    class="btn btn-primary" id="install-github-btn">
+                    <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                            d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4-1.6-.5-1.4-1.3-1.8-1.3-1.8-1-.7.1-.7.1-.7 1.1.1 1.7 1.2 1.7 1.2 1 1.7 2.6 1.2 3.3.9.1-.7.4-1.2.7-1.5-2.6-.3-5.4-1.3-5.4-5.9 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.4 11.4 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.7.2 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .3" />
+                    </svg>
+                    View on GitHub
+                </a>
+            </div>
+
+            <div class="install-terminal" id="install-terminal">
+                <div class="terminal">
+                    <div class="terminal-header">
+                        <span class="terminal-dot red"></span>
+                        <span class="terminal-dot yellow"></span>
+                        <span class="terminal-dot green"></span>
+                        <span class="terminal-title">Install Praxis</span>
+                    </div>
+                    <div class="terminal-body">
+                        <div class="term-line"><span class="term-comment"># Global installation</span></div>
+                        <div class="term-line"><span class="term-prompt">$</span> <span class="term-cmd">npm install -g
+                                @intoinside/praxis</span></div>
+                        <br />
+                        <div class="term-line"><span class="term-comment"># Verify installation</span></div>
+                        <div class="term-line"><span class="term-prompt">$</span> <span class="term-cmd">praxis
+                                --version</span></div>
+                        <div class="term-line term-out">praxis/1.x.x</div>
+                        <br />
+                        <div class="term-line"><span class="term-comment"># Start your project</span></div>
+                        <div class="term-line"><span class="term-prompt">$</span> <span class="term-cmd">praxis init
+                                my-project</span></div>
+                        <div class="term-line term-out">✔ Project initialised successfully</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── FOOTER ────────────────────────────────────────────────────── -->
+    <footer id="footer">
+        <div class="container footer-inner">
+            <div class="footer-brand">
+                <span class="logo-bracket">[</span>Praxis<span class="logo-bracket">]</span>
+                <p>Intent‑Driven Development framework.<br />Under active development.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Resources</h4>
+                <a href="https://github.com/intoinside/praxis" target="_blank" rel="noopener noreferrer"
+                    id="footer-github-link">GitHub Repository</a>
+                <a href="https://github.com/intoinside/praxis/blob/main/README.md" target="_blank"
+                    rel="noopener noreferrer" id="footer-readme-link">Documentation</a>
+                <a href="https://github.com/intoinside/praxis/blob/main/CONTRIBUTING.md" target="_blank"
+                    rel="noopener noreferrer" id="footer-contributing-link">Contributing</a>
+                <a href="https://github.com/intoinside/praxis/blob/main/LICENSE" target="_blank"
+                    rel="noopener noreferrer" id="footer-license-link">License (MIT)</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>Built with ♥ — <a href="https://github.com/intoinside/praxis" target="_blank"
+                    rel="noopener noreferrer">github.com/intoinside/praxis</a></p>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
