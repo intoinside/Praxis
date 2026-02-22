@@ -1,5 +1,9 @@
 # Praxis
 
+<div align="center">
+  <img src="docs/assets/praxis.png" alt="Praxis logo" width="160" />
+</div>
+
 ```
  ███████████                                   ███         
 ░░███░░░░░███                                 ░░░          
