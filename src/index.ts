@@ -33,8 +33,12 @@ function registerCommand(parent: Command, def: CommandDefinition) {
     // Register options
     if (def.options) {
         def.options.forEach(opt => {
-            const flag = opt.required ? `<${opt.name}>` : `[${opt.name}]`;
-            cmd.option(opt.alias ? `-${opt.alias}, --${opt.name} ${flag}` : `--${opt.name} ${flag}`, opt.description);
+            if (opt.boolean) {
+                cmd.option(opt.alias ? `-${opt.alias}, --${opt.name}` : `--${opt.name}`, opt.description);
+            } else {
+                const flag = opt.required ? `<${opt.name}>` : `[${opt.name}]`;
+                cmd.option(opt.alias ? `-${opt.alias}, --${opt.name} ${flag}` : `--${opt.name} ${flag}`, opt.description);
+            }
         });
     }
 

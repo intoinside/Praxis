@@ -30,6 +30,7 @@ export interface CommandDefinition {
     description: string;
     alias?: string;
     required?: boolean;
+    boolean?: boolean;
   }[];
   arguments?: {
     name: string;
@@ -87,6 +88,13 @@ export const manifest: CommandDefinition[] = [
         name: 'list',
         description: 'List all defined intents',
         action: intentListAction,
+        options: [
+          {
+            name: 'with-archived',
+            description: 'Include archived intents in the list',
+            boolean: true,
+          }
+        ]
       },
       {
         name: 'check',
