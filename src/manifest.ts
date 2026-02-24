@@ -159,6 +159,11 @@ export const manifest: CommandDefinition[] = [
             description: 'The ID of the intent to list specs for',
             required: false,
           },
+          {
+            name: 'with-archived',
+            description: 'Include archived specs in the list',
+            boolean: true,
+          },
         ],
       },
       {

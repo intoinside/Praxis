@@ -9,7 +9,7 @@ import {
 /**
  * Action for 'praxis spec list'
  */
-export async function specListAction(options: { fromIntent?: string }) {
+export async function specListAction(options: { fromIntent?: string, withArchived?: boolean } = {}) {
     const rootDir = process.cwd();
     const specsDir = path.join(rootDir, SPECS_DIR);
 
@@ -29,24 +29,34 @@ export async function specListAction(options: { fromIntent?: string }) {
         });
     }
 
-    // Filter out archived specs (both by directory and status)
-    filteredSpecs = filteredSpecs.filter(file => {
-        // Skip if in 'archive' directory
-        if (file.includes(path.sep + 'archive' + path.sep)) {
-            return false;
-        }
+    // Filter by status unless withArchived is true
+    if (!options.withArchived) {
+        filteredSpecs = filteredSpecs.filter(file => {
+            // Skip if in 'archive' directory
+            if (file.includes(path.sep + 'archive' + path.sep)) {
+                return false;
+            }
 
-        const content = fs.readFileSync(file, 'utf8');
-        const metadata = parseMetadata(content);
+            const content = fs.readFileSync(file, 'utf8');
+            const metadata = parseMetadata(content);
 
-        return metadata.status.toLowerCase() !== 'archived';
-    });
+            return metadata.status.toLowerCase() === 'wip';
+        });
+    }
 
     if (filteredSpecs.length === 0) {
         if (options.fromIntent) {
-            console.log(`No active specifications found for intent '${options.fromIntent}'.`);
+            if (!options.withArchived) {
+                console.log(`No active specifications found for intent '${options.fromIntent}'. Use --with-archived to see all specs.`);
+            } else {
+                console.log(`No specifications found for intent '${options.fromIntent}'.`);
+            }
         } else {
-            console.log('No active specifications found.');
+            if (!options.withArchived) {
+                console.log('No active specifications found. Use --with-archived to see all specs.');
+            } else {
+                console.log('No specifications found.');
+            }
         }
         return;
     }
