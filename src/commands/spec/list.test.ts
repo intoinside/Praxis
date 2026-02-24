@@ -21,11 +21,11 @@ describe('specListAction', () => {
         expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('No specifications found'));
     });
 
-    it('should list all active specs when no intent is specified', async () => {
+    it('should list only WIP specs when no flags are provided', async () => {
         // Setup mock filesystem structure
-        // .praxis/specs/intent1/spec1/spec.md
+        // .praxis/specs/intent1/spec1/spec.md (WIP)
         // .praxis/specs/intent1/spec2/spec.md (Archived)
-        // .praxis/specs/intent2/spec3/spec.md
+        // .praxis/specs/intent2/spec3/spec.md (Draft)
 
         vi.mocked(fs.readdirSync).mockImplementation((p) => {
             const pathStr = p.toString();
@@ -44,7 +44,11 @@ describe('specListAction', () => {
         });
 
         vi.mocked(fs.readFileSync).mockImplementation((p) => {
-            if (p.toString().includes('spec2')) {
+            const pathStr = p.toString();
+            if (pathStr.includes('spec1')) {
+                return '**Status**: WIP\n**Created**: 2024-01-01';
+            }
+            if (pathStr.includes('spec2')) {
                 return '**Status**: Archived\n**Created**: 2024-01-01';
             }
             return '**Status**: Draft\n**Created**: 2024-01-01';
@@ -52,10 +56,41 @@ describe('specListAction', () => {
 
         await specListAction({});
 
-        // Should show spec1 and spec3, but not spec2
+        // Should show spec1 (WIP), but not spec2 (Archived) or spec3 (Draft)
         expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('spec1'));
-        expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('spec3'));
         expect(consoleSpy).not.toHaveBeenCalledWith(expect.stringContaining('spec2'));
+        expect(consoleSpy).not.toHaveBeenCalledWith(expect.stringContaining('spec3'));
+    });
+
+    it('should list all specs when --with-archived is provided', async () => {
+        vi.mocked(fs.readdirSync).mockImplementation((p) => {
+            const pathStr = p.toString();
+            if (pathStr.endsWith('specs')) return ['intent1'] as any;
+            if (pathStr.endsWith('intent1')) return ['spec1', 'spec2'] as any;
+            return ['spec.md'] as any;
+        });
+
+        vi.mocked(fs.statSync).mockImplementation((p) => {
+            const pathStr = p.toString();
+            return {
+                isDirectory: () => !pathStr.endsWith('spec.md'),
+                isFile: () => pathStr.endsWith('spec.md')
+            } as any;
+        });
+
+        vi.mocked(fs.readFileSync).mockImplementation((p) => {
+            const pathStr = p.toString();
+            if (pathStr.includes('spec1')) {
+                return '**Status**: WIP\n**Created**: 2024-01-01';
+            }
+            return '**Status**: Archived\n**Created**: 2024-01-01';
+        });
+
+        await specListAction({ withArchived: true });
+
+        // Should show both specs
+        expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('spec1'));
+        expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('spec2'));
     });
 
     it('should filter specs by intent ID', async () => {
@@ -75,7 +110,7 @@ describe('specListAction', () => {
             } as any;
         });
 
-        vi.mocked(fs.readFileSync).mockReturnValue('**Status**: Draft\n**Created**: 2024-01-01');
+        vi.mocked(fs.readFileSync).mockReturnValue('**Status**: WIP\n**Created**: 2024-01-01');
 
         await specListAction({ fromIntent: 'intent1' });
 
@@ -99,7 +134,7 @@ describe('specListAction', () => {
             } as any;
         });
 
-        vi.mocked(fs.readFileSync).mockReturnValue('**Status**: Draft\n**Created**: 2024-01-01');
+        vi.mocked(fs.readFileSync).mockReturnValue('**Status**: WIP\n**Created**: 2024-01-01');
 
         await specListAction({ fromIntent: 'unknown-intent' });
 
